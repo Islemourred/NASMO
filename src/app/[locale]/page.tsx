@@ -30,9 +30,9 @@ function Hero() {
   const [current, setCurrent] = useState(0);
 
   const slides = [
-    { title: t("slide1Title"), desc: t("slide1Desc"), img: "/images/hero1.jpg" },
-    { title: t("slide2Title"), desc: t("slide2Desc"), img: "/images/hero2.jpg" },
-    { title: t("slide3Title"), desc: t("slide3Desc"), img: "/images/hero3.jpg" },
+    { title: t("slide1Title"), desc: t("slide1Desc"), img: "/images/hero1.jpg", imgMobile: "/images/hero-industrial.png" },
+    { title: t("slide2Title"), desc: t("slide2Desc"), img: "/images/hero2.jpg", imgMobile: "/images/hero-airport.png" },
+    { title: t("slide3Title"), desc: t("slide3Desc"), img: "/images/hero3.jpg", imgMobile: "/images/hero-generators.png" },
   ];
 
   useEffect(() => {
@@ -45,7 +45,8 @@ function Hero() {
       {/* Background images */}
       {slides.map((s, i) => (
         <div key={i} className={`absolute inset-0 transition-opacity duration-[1500ms] ${i === current ? "opacity-100" : "opacity-0"}`}>
-          <Image src={s.img} alt={s.title} fill className="object-cover" sizes="100vw" priority={i === 0} />
+          <Image src={s.imgMobile} alt={s.title} fill className="object-cover lg:hidden" sizes="100vw" priority={i === 0} />
+          <Image src={s.img} alt={s.title} fill className="object-cover hidden lg:block" sizes="100vw" priority={i === 0} />
         </div>
       ))}
 

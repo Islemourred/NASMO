@@ -50,7 +50,8 @@ export default function AboutPage() {
     <>
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[400px] max-h-[550px] overflow-hidden bg-black">
-        <Image src="/images/hero1.jpg" alt="NASMO Team" fill className="object-cover opacity-60" sizes="100vw" />
+        <Image src="/images/hero-industrial.png" alt="NASMO Team" fill className="object-cover opacity-60 lg:hidden" sizes="100vw" />
+        <Image src="/images/hero1.jpg" alt="NASMO Team" fill className="object-cover opacity-60 hidden lg:block" sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80" />
         <div className="relative z-10 h-full container flex flex-col justify-end pb-16">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
