@@ -3,28 +3,28 @@
 import { useState } from "react";
 
 const sections = [
-  { id: "hero", label: "Hero / Bannière", fields: [
-    { key: "title", label: "Titre principal", type: "text", value: "ENTRELEC" },
-    { key: "subtitle", label: "Sous-titre", type: "textarea", value: "Votre partenaire en solutions électriques industrielles depuis 1997" },
-    { key: "cta1", label: "Bouton principal", type: "text", value: "Nos Services" },
-    { key: "cta2", label: "Bouton secondaire", type: "text", value: "Demander une Fiche Technique" },
+  { id: "hero", label: "Hero / Banner", fields: [
+    { key: "title", label: "Main Title", type: "text", value: "NASMO" },
+    { key: "subtitle", label: "Subtitle", type: "textarea", value: "Professional maintenance services for trucks, construction engines, and industrial vehicles" },
+    { key: "cta1", label: "Primary Button", type: "text", value: "Our Services" },
+    { key: "cta2", label: "Secondary Button", type: "text", value: "Contact Us" },
   ]},
-  { id: "about", label: "À Propos", fields: [
-    { key: "title", label: "Titre", type: "text", value: "ENTRELEC" },
-    { key: "desc", label: "Description", type: "textarea", value: "ENTRELEC est une S.A.R.L de droit algérien créée en 1997, spécialisée principalement dans le secteur de l'industrie électrique." },
-    { key: "desc2", label: "Description 2", type: "textarea", value: "ENTRELEC vous offre une gamme complète de services dans les domaines suivants :" },
+  { id: "about", label: "About", fields: [
+    { key: "title", label: "Title", type: "text", value: "NASMO" },
+    { key: "desc", label: "Description", type: "textarea", value: "NASMO is a specialized maintenance company with more than 10 years of experience in servicing heavy trucks, construction engines, and industrial machinery." },
+    { key: "desc2", label: "Description 2", type: "textarea", value: "We work with major construction and infrastructure companies such as GCB and Cosider." },
   ]},
-  { id: "stats", label: "Statistiques", fields: [
-    { key: "years", label: "Années d'expérience", type: "text", value: "27+" },
-    { key: "projects", label: "Projets réalisés", type: "text", value: "500+" },
-    { key: "clients", label: "Clients satisfaits", type: "text", value: "200+" },
-    { key: "coverage", label: "Couverture", type: "text", value: "100%" },
+  { id: "stats", label: "Statistics", fields: [
+    { key: "years", label: "Years of Experience", type: "text", value: "10+" },
+    { key: "projects", label: "Projects Completed", type: "text", value: "500+" },
+    { key: "clients", label: "Trusted Clients", type: "text", value: "50+" },
+    { key: "coverage", label: "Coverage", type: "text", value: "100%" },
   ]},
   { id: "contact", label: "Contact", fields: [
-    { key: "address", label: "Adresse", type: "text", value: "Deli Ibrahim, Dely Brahim – Alger, Algérie" },
-    { key: "phone", label: "Téléphone", type: "text", value: "+213 (0) 23.11.67.60/68" },
-    { key: "email", label: "Email", type: "text", value: "contact@entrelec.dz" },
-    { key: "technical", label: "Service technique", type: "text", value: "+213 (0) 550.58.74.63" },
+    { key: "address", label: "Address", type: "text", value: "Algeria" },
+    { key: "phone", label: "Phone", type: "text", value: "+213 (0) 551.99.55.68" },
+    { key: "email", label: "Email", type: "text", value: "contact@nasmo.dz" },
+    { key: "technical", label: "Technical Support", type: "text", value: "+213 (0) 550.58.74.63" },
   ]},
 ];
 
@@ -51,8 +51,8 @@ export default function ContentAdminPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-extrabold text-[var(--text-primary)] tracking-tight">Contenu</h1>
-          <p className="text-txtmuted text-[.84rem] mt-1">Modifiez le contenu de votre page d&apos;accueil</p>
+          <h1 className="text-xl font-extrabold text-[var(--text-primary)] tracking-tight">Content</h1>
+          <p className="text-txtmuted text-[.84rem] mt-1">Edit your homepage content</p>
         </div>
         <button onClick={handleSave} className={`btn text-[.8rem] ${saved ? "bg-green-500/10 text-green-400 border-green-500/20" : "btn-primary"}`}>
           {saved ? (
@@ -60,14 +60,14 @@ export default function ContentAdminPage() {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
               </svg>
-              Sauvegardé !
+              Saved!
             </>
           ) : (
             <>
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
               </svg>
-              Sauvegarder
+              Save
             </>
           )}
         </button>

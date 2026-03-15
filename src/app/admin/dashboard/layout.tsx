@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Header */}
         <div className="h-16 flex items-center px-4 border-b border-white/[0.06] gap-2">
           {!collapsed && (
-            <Image src="/main_logo.png" alt="ENTRELEC" width={110} height={28} className="h-6 w-auto brightness-0 invert" />
+            <Image src="/main_logo.png" alt="NASMO" width={110} height={28} className="h-6 w-auto brightness-0 invert" />
           )}
           <button onClick={() => setCollapsed(!collapsed)} className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors ml-auto">
             <svg className={`w-4 h-4 text-white/40 transition-transform ${collapsed ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

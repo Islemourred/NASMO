@@ -1,7 +1,7 @@
 import "../globals.css";
 
 export const metadata = {
-  title: "ENTRELEC - Administration",
+  title: "NASMO - Administration",
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

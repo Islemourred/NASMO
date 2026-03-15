@@ -120,7 +120,7 @@ export default function ProductDetailPage() {
                 <h1 className="text-2xl lg:text-3xl font-extrabold text-txt tracking-tight mb-2">{product.name}</h1>
                 <p className="text-txtsec text-[.95rem] leading-relaxed mb-6">{product.desc}</p>
 
-                {product.power !== "—" && (
+                {product.power !== "-" && (
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-orange/5 border border-orange/10 mb-6">
                     <svg className="w-4 h-4 text-orange" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -201,7 +201,7 @@ export default function ProductDetailPage() {
                       <Image src={product.img} alt="" width={40} height={40} className="object-contain" />
                       <div>
                         <div className="text-[.82rem] font-semibold text-txt">{product.name}</div>
-                        <div className="text-[.7rem] text-txtmuted">{product.brand} — {product.power}</div>
+                        <div className="text-[.7rem] text-txtmuted">{product.brand} | {product.power}</div>
                       </div>
                     </div>
 
@@ -262,7 +262,7 @@ export default function ProductDetailPage() {
                     </button>
 
                     <p className="text-center text-txtmuted text-[.7rem]">
-                      En soumettant ce formulaire, vous recevrez un email de confirmation d&apos;ENTRELEC avec les détails de votre demande.
+                      En soumettant ce formulaire, vous recevrez un email de confirmation d&apos;NASMO avec les détails de votre demande.
                     </p>
                   </form>
                 )}

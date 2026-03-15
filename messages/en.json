@@ -2,104 +2,108 @@
   "nav": {
     "home": "Home",
     "about": "About",
-    "products": "Products",
-    "services": "Our Services",
+    "products": "Our Fleet",
+    "services": "Services",
     "contact": "Contact",
-    "serviceOffer": "Request a Quote"
+    "serviceOffer": "Request Service"
   },
   "hero": {
-    "slide1Title": "Industrial Electricity",
-    "slide1Desc": "Complete solutions for LV/MV industrial electrical installations",
-    "slide2Title": "Airport Lighting",
-    "slide2Desc": "Equipment and lighting for airport runways",
-    "slide3Title": "Electrical Equipment",
-    "slide3Desc": "Supply of generators, UPS and voltage stabilizers",
-    "cta": "Learn More",
+    "slide1Title": "Truck Maintenance",
+    "slide1Desc": "Diagnostics, engine repair, and preventive servicing for heavy trucks",
+    "slide2Title": "Construction Equipment",
+    "slide2Desc": "Maintenance for construction machinery used in large-scale projects",
+    "slide3Title": "Mobile Service",
+    "slide3Desc": "On-site maintenance and emergency repairs anywhere in Algeria",
+    "cta": "Our Services",
     "ctaContact": "Contact Us"
   },
   "about": {
     "sectionTag": "About Us",
-    "title": "ENTRELEC",
-    "description": "ENTRELEC is an Algerian SARL established in 1997, specialized primarily in the electrical industry sector.",
-    "description2": "ENTRELEC offers you a complete range of services in the following areas:",
-    "service1": "Industrial electricity",
-    "service2": "Airport runway lighting and marking",
-    "service3": "Supply of generators, voltage stabilizers, UPS, electrical cabinets",
-    "expertise": "To achieve this, ENTRELEC relies on the experience of its managers and technical staff. It also has a dedicated engineering department to find the best solutions to resolve technical problems posed by its clients.",
-    "coverage": "ENTRELEC's operations cover the entire Algerian territory.",
-    "devTitle": "Development and Sustainability",
-    "devDesc": "ENTRELEC continuously invests in research and development to offer innovative and sustainable solutions to its clients.",
+    "title": "NASMO",
+    "description": "NASMO is a specialized maintenance company with more than 10 years of experience in servicing heavy trucks, construction engines, and industrial machinery.",
+    "description2": "Our company works with major construction and infrastructure companies such as GCB and Cosider, providing reliable maintenance services for their fleets and equipment.",
+    "service1": "Truck maintenance: diagnostics, engine repair, and preventive servicing",
+    "service2": "Construction equipment: maintenance for heavy machinery on large-scale projects",
+    "service3": "Mobile service: on-site maintenance and emergency repairs across Algeria",
+    "yearsLabel": "Years",
+    "aboutBtn": "About Us",
+    "expertise": "Our team of experienced technicians ensures high-quality repairs, preventive maintenance, and rapid intervention when equipment failures occur. We are committed to reliability, professionalism, and long-term partnerships with our clients.",
+    "coverage": "NASMO's mobile technical teams can travel anywhere in Algeria to perform maintenance directly on your site.",
+    "devTitle": "Reliability & Professionalism",
+    "devDesc": "We are committed to keeping Algeria's heavy machinery running with professional, dependable maintenance services.",
     "qualityTitle": "Excellence",
-    "qualityDesc": "Our commitment to quality and excellence allows us to maintain the highest industry standards.",
+    "qualityDesc": "Our commitment to quality and professionalism allows us to maintain the highest industry standards in heavy equipment maintenance.",
     "stats": {
       "years": "Years of Experience",
       "projects": "Projects Completed",
-      "clients": "Satisfied Clients",
+      "clients": "Trusted Clients",
       "coverage": "National Coverage"
     }
   },
   "services": {
-    "sectionTag": "Services & Solutions",
-    "title": "Application Domains",
-    "subtitle": "ENTRELEC offers you a complete range of services in the field of",
+    "sectionTag": "Our Services",
+    "title": "What We Do",
+    "subtitle": "NASMO provides professional maintenance services for trucks, construction engines, and industrial vehicles",
     "electrical": {
-      "title": "Industrial Electricity",
-      "desc": "LV/MV circuit renovation, new installations, cabling and industrial lighting. Complete solutions for industry.",
+      "title": "Truck Maintenance",
+      "desc": "Complete diagnostics, engine repair, preventive maintenance, and fleet servicing for heavy trucks.",
       "features": {
-        "f1": "LV/MV Installations",
-        "f2": "Industrial Cabling",
-        "f3": "Technical Lighting",
-        "f4": "Preventive Maintenance"
+        "f1": "Engine Diagnostics",
+        "f2": "Preventive Maintenance",
+        "f3": "Mechanical Repairs",
+        "f4": "Fleet Servicing"
       }
     },
     "airport": {
-      "title": "Airport Lighting",
-      "desc": "Study, implementation and maintenance of aerodrome lighting and specialized airport equipment.",
+      "title": "Construction Machinery",
+      "desc": "Engine repair, hydraulic system checks, equipment servicing, and preventive inspections for construction equipment.",
       "features": {
-        "f1": "Runway Lighting",
-        "f2": "Taxiway Lighting",
-        "f3": "Airport Signaling",
-        "f4": "Specialized Maintenance"
+        "f1": "Engine Repair",
+        "f2": "Hydraulic Systems",
+        "f3": "Equipment Servicing",
+        "f4": "Preventive Inspections"
       }
     },
     "equipment": {
-      "title": "Equipment Supply",
-      "desc": "Specialist in high-capacity generators (10-3500 KVA) and power protection systems.",
+      "title": "Mobile Service",
+      "desc": "Our mobile technical teams travel anywhere in Algeria to perform maintenance directly on your site, minimizing downtime.",
       "features": {
-        "f1": "Power Generators",
-        "f2": "UPS Systems",
-        "f3": "Voltage Stabilizers",
-        "f4": "Electrical Cabinets"
+        "f1": "On-Site Repairs",
+        "f2": "Emergency Response",
+        "f3": "Nationwide Coverage",
+        "f4": "Rapid Intervention"
       }
     },
-    "ctaTitle": "Want more details about our Activities?",
-    "ctaPhone": "Call us at:",
-    "ctaButton": "Contact Us"
+    "ctaTitle": "Need maintenance for your heavy equipment?",
+    "ctaPhone": "Call us at",
+    "ctaButton": "Contact Us",
+    "learnMore": "Learn More"
   },
   "products": {
-    "sectionTag": "Our Products",
-    "title": "Product Catalog",
-    "subtitle": "Discover our complete range of high-quality electrical equipment",
+    "sectionTag": "Experience & Clients",
+    "title": "They Trust Us",
+    "subtitle": "With more than a decade of experience, NASMO has supported major construction and infrastructure projects in Algeria",
     "categories": {
       "all": "All",
-      "generators": "Power Generators",
-      "ups": "UPS / Inverters",
-      "stabilizers": "Voltage Stabilizers"
+      "generators": "Construction",
+      "ups": "Infrastructure",
+      "stabilizers": "Transport"
     },
-    "viewDetails": "View Details",
-    "downloadCatalog": "Download Catalog"
+    "viewDetails": "Learn More",
+    "downloadCatalog": "View All Projects"
   },
   "clients": {
     "sectionTag": "Our Partners",
     "title": "They Trust Us",
-    "subtitle": "Leading companies trust us for their electrical solutions needs"
+    "subtitle": "Major construction companies trust NASMO for their heavy equipment maintenance needs"
   },
   "contact": {
     "sectionTag": "Contact Us",
     "title": "Get In Touch",
-    "subtitle": "Don't hesitate to contact us for any information request or technical data sheet",
+    "subtitle": "For service requests, partnerships, or more information about our maintenance solutions, please contact us",
     "form": {
       "name": "Full Name",
+      "company": "Company",
       "email": "Email Address",
       "phone": "Phone",
       "subject": "Subject",
@@ -108,36 +112,39 @@
     },
     "info": {
       "address": "Address",
-      "addressValue": "Deli Ibrahim, Dely Brahim – Algiers, Algeria",
+      "addressValue": "Algeria",
       "phone": "Phone",
-      "phoneValue": "+213 (0) 23.11.67.60/68",
-      "mobile": "+213 (0) 551.99.55.68",
+      "phoneValue": "+213 (0) 551.99.55.68",
+      "mobile": "+213 (0) 550.58.74.63",
       "email": "Email",
-      "emailValue": "contact@entrelec.dz",
-      "emailValue2": "entrelecdz@yahoo.fr",
-      "commercial": "Commercial Service",
+      "emailValue": "contact@nasmo.dz",
+      "emailValue2": "info@nasmo.dz",
+      "commercial": "Service Requests",
       "commercialValue": "+213 (0) 551.99.55.68",
-      "technical": "Technical Service",
+      "technical": "Technical Support",
       "technicalValue": "+213 (0) 550.58.74.63"
     }
   },
   "footer": {
-    "description": "ENTRELEC is an Algerian SARL founded in 1997, primarily dedicated to the electrical industry.",
+    "description": "NASMO is a specialized maintenance company with 10+ years of experience in servicing heavy trucks, construction engines, and industrial machinery across Algeria.",
     "navigation": "Navigation",
-    "categories": "Our Categories",
+    "categories": "Our Services",
     "headquarters": "Headquarters",
     "rights": "All rights reserved",
     "cat": {
-      "stabilizers": "Voltage Stabilizers",
-      "airport": "Airport Equipment",
-      "generators": "Power Generators",
-      "augier": "Augier Energy",
-      "ups": "UPS / Inverters"
+      "stabilizers": "Fleet Servicing",
+      "airport": "Construction Equipment",
+      "generators": "Truck Maintenance",
+      "augier": "Mobile Service",
+      "ups": "Emergency Repairs"
     }
   },
   "common": {
     "learnMore": "Learn More",
     "contactUs": "Contact Us",
-    "since": "Since 1997"
+    "callNow": "Call Now",
+    "since": "10+ Years of Experience",
+    "ctaHeading": "Need maintenance for your heavy equipment?",
+    "ctaCall": "Call us"
   }
 }

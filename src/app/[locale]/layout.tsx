@@ -16,19 +16,20 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "nav" });
   return {
     title: {
-      default: "ENTRELEC - Solutions Électriques Industrielles",
-      template: "%s | ENTRELEC",
+      default: "NASMO",
+      template: "%s | NASMO",
     },
     description:
-      "ENTRELEC - Spécialiste en électricité industrielle, balisage d'aéroports et fourniture d'équipements électriques depuis 1997.",
+      "NASMO - Professional maintenance services for heavy trucks, construction engines, and industrial vehicles across Algeria. 10+ years of experience.",
     keywords: [
-      "ENTRELEC",
-      "électricité industrielle",
-      "balisage aéroport",
-      "groupes électrogènes",
-      "onduleurs",
-      "stabilisateurs",
-      "Algérie",
+      "NASMO",
+      "heavy equipment maintenance",
+      "truck maintenance",
+      "construction machinery",
+      "Algeria",
+      "GCB",
+      "Cosider",
+      "mobile maintenance",
     ],
   };
 }
@@ -56,7 +57,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/tab_icon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -72,7 +73,7 @@ export default async function LocaleLayout({
         <Providers>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Navbar />
-            <main className="pt-[4.625rem]">{children}</main>
+            <main>{children}</main>
             <Footer />
           </NextIntlClientProvider>
         </Providers>

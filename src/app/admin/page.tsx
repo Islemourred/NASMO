@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
       <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden">
         <Image
           src="/images/hero-industrial.png"
-          alt="ENTRELEC Industrial"
+          alt="NASMO Industrial"
           fill
           className="object-cover"
           priority
@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
           <div>
             <Image
               src="/main_logo.png"
-              alt="ENTRELEC"
+              alt="NASMO"
               width={140}
               height={35}
               className="h-8 w-auto brightness-0 invert"
@@ -117,7 +117,7 @@ export default function AdminLoginPage() {
           <div className="lg:hidden mb-10 text-center">
             <Image
               src="/main_logo.png"
-              alt="ENTRELEC"
+              alt="NASMO"
               width={120}
               height={30}
               className="h-7 w-auto brightness-0 invert mx-auto mb-4"
@@ -151,7 +151,7 @@ export default function AdminLoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@entrelec.dz"
+                  placeholder="admin@NASMO.dz"
                   className="input"
                   style={{ paddingLeft: '2.75rem' }}
                   required
@@ -245,7 +245,7 @@ export default function AdminLoginPage() {
               <svg className="w-3.5 h-3.5 inline -mt-0.5 mr-1.5 text-orange/50" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
               </svg>
-              Connexion sécurisée — ENTRELEC © {new Date().getFullYear()}
+              Connexion sécurisée | NASMO © {new Date().getFullYear()}
             </p>
           </div>
         </motion.div>
