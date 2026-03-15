@@ -1,0 +1,143 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "products": "Products",
+    "services": "Our Services",
+    "contact": "Contact",
+    "serviceOffer": "Request a Quote"
+  },
+  "hero": {
+    "slide1Title": "Industrial Electricity",
+    "slide1Desc": "Complete solutions for LV/MV industrial electrical installations",
+    "slide2Title": "Airport Lighting",
+    "slide2Desc": "Equipment and lighting for airport runways",
+    "slide3Title": "Electrical Equipment",
+    "slide3Desc": "Supply of generators, UPS and voltage stabilizers",
+    "cta": "Learn More",
+    "ctaContact": "Contact Us"
+  },
+  "about": {
+    "sectionTag": "About Us",
+    "title": "ENTRELEC",
+    "description": "ENTRELEC is an Algerian SARL established in 1997, specialized primarily in the electrical industry sector.",
+    "description2": "ENTRELEC offers you a complete range of services in the following areas:",
+    "service1": "Industrial electricity",
+    "service2": "Airport runway lighting and marking",
+    "service3": "Supply of generators, voltage stabilizers, UPS, electrical cabinets",
+    "expertise": "To achieve this, ENTRELEC relies on the experience of its managers and technical staff. It also has a dedicated engineering department to find the best solutions to resolve technical problems posed by its clients.",
+    "coverage": "ENTRELEC's operations cover the entire Algerian territory.",
+    "devTitle": "Development and Sustainability",
+    "devDesc": "ENTRELEC continuously invests in research and development to offer innovative and sustainable solutions to its clients.",
+    "qualityTitle": "Excellence",
+    "qualityDesc": "Our commitment to quality and excellence allows us to maintain the highest industry standards.",
+    "stats": {
+      "years": "Years of Experience",
+      "projects": "Projects Completed",
+      "clients": "Satisfied Clients",
+      "coverage": "National Coverage"
+    }
+  },
+  "services": {
+    "sectionTag": "Services & Solutions",
+    "title": "Application Domains",
+    "subtitle": "ENTRELEC offers you a complete range of services in the field of",
+    "electrical": {
+      "title": "Industrial Electricity",
+      "desc": "LV/MV circuit renovation, new installations, cabling and industrial lighting. Complete solutions for industry.",
+      "features": {
+        "f1": "LV/MV Installations",
+        "f2": "Industrial Cabling",
+        "f3": "Technical Lighting",
+        "f4": "Preventive Maintenance"
+      }
+    },
+    "airport": {
+      "title": "Airport Lighting",
+      "desc": "Study, implementation and maintenance of aerodrome lighting and specialized airport equipment.",
+      "features": {
+        "f1": "Runway Lighting",
+        "f2": "Taxiway Lighting",
+        "f3": "Airport Signaling",
+        "f4": "Specialized Maintenance"
+      }
+    },
+    "equipment": {
+      "title": "Equipment Supply",
+      "desc": "Specialist in high-capacity generators (10-3500 KVA) and power protection systems.",
+      "features": {
+        "f1": "Power Generators",
+        "f2": "UPS Systems",
+        "f3": "Voltage Stabilizers",
+        "f4": "Electrical Cabinets"
+      }
+    },
+    "ctaTitle": "Want more details about our Activities?",
+    "ctaPhone": "Call us at:",
+    "ctaButton": "Contact Us"
+  },
+  "products": {
+    "sectionTag": "Our Products",
+    "title": "Product Catalog",
+    "subtitle": "Discover our complete range of high-quality electrical equipment",
+    "categories": {
+      "all": "All",
+      "generators": "Power Generators",
+      "ups": "UPS / Inverters",
+      "stabilizers": "Voltage Stabilizers"
+    },
+    "viewDetails": "View Details",
+    "downloadCatalog": "Download Catalog"
+  },
+  "clients": {
+    "sectionTag": "Our Partners",
+    "title": "They Trust Us",
+    "subtitle": "Leading companies trust us for their electrical solutions needs"
+  },
+  "contact": {
+    "sectionTag": "Contact Us",
+    "title": "Get In Touch",
+    "subtitle": "Don't hesitate to contact us for any information request or technical data sheet",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message"
+    },
+    "info": {
+      "address": "Address",
+      "addressValue": "Deli Ibrahim, Dely Brahim – Algiers, Algeria",
+      "phone": "Phone",
+      "phoneValue": "+213 (0) 23.11.67.60/68",
+      "mobile": "+213 (0) 551.99.55.68",
+      "email": "Email",
+      "emailValue": "contact@entrelec.dz",
+      "emailValue2": "entrelecdz@yahoo.fr",
+      "commercial": "Commercial Service",
+      "commercialValue": "+213 (0) 551.99.55.68",
+      "technical": "Technical Service",
+      "technicalValue": "+213 (0) 550.58.74.63"
+    }
+  },
+  "footer": {
+    "description": "ENTRELEC is an Algerian SARL founded in 1997, primarily dedicated to the electrical industry.",
+    "navigation": "Navigation",
+    "categories": "Our Categories",
+    "headquarters": "Headquarters",
+    "rights": "All rights reserved",
+    "cat": {
+      "stabilizers": "Voltage Stabilizers",
+      "airport": "Airport Equipment",
+      "generators": "Power Generators",
+      "augier": "Augier Energy",
+      "ups": "UPS / Inverters"
+    }
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "contactUs": "Contact Us",
+    "since": "Since 1997"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À Propos",
+    "products": "Produits",
+    "services": "Nos Services",
+    "contact": "Contact",
+    "serviceOffer": "Demander un devis"
+  },
+  "hero": {
+    "slide1Title": "Électricité Industrielle",
+    "slide1Desc": "Solutions complètes en installations électriques industrielles BT/MT",
+    "slide2Title": "Balisage d'Aéroports",
+    "slide2Desc": "Équipements et balisage des pistes d'atterrissages",
+    "slide3Title": "Équipements Électriques",
+    "slide3Desc": "Fourniture de groupes électrogènes, onduleurs et stabilisateurs",
+    "cta": "En savoir plus",
+    "ctaContact": "Nous contacter"
+  },
+  "about": {
+    "sectionTag": "À propos de nous",
+    "title": "ENTRELEC",
+    "description": "ENTRELEC est une S.A.R.L de droit algérien créée en 1997, spécialisée principalement dans le secteur de l'industrie électrique.",
+    "description2": "ENTRELEC vous offre une gamme complète de services dans les domaines suivants :",
+    "service1": "Électricité industrielle",
+    "service2": "Balisage d'aéroports et pistes d'atterrissages",
+    "service3": "Fourniture de groupes électrogènes, stabilisateurs de tension, onduleurs (UPS), armoires électriques",
+    "expertise": "Pour ce faire, ENTRELEC s'appuie sur l'expérience de ses dirigeants et de son personnel technique. Elle dispose également d'un service d'ingénierie dédié à trouver les meilleures solutions pour résoudre les problèmes techniques posés par ses clients.",
+    "coverage": "Les interventions de ENTRELEC couvrent l'ensemble du territoire algérien.",
+    "devTitle": "Développement et Durabilité",
+    "devDesc": "ENTRELEC investit continuellement dans la recherche et le développement pour offrir des solutions innovantes et durables à ses clients.",
+    "qualityTitle": "Exigence",
+    "qualityDesc": "Notre engagement envers la qualité et l'excellence nous permet de maintenir les plus hauts standards de l'industrie.",
+    "stats": {
+      "years": "Années d'expérience",
+      "projects": "Projets réalisés",
+      "clients": "Clients satisfaits",
+      "coverage": "Couverture nationale"
+    }
+  },
+  "services": {
+    "sectionTag": "Prestations & Services",
+    "title": "Domaines d'Applications",
+    "subtitle": "ENTRELEC vous propose une gamme complète de prestations dans le domaine de",
+    "electrical": {
+      "title": "Électricité Industrielle",
+      "desc": "Rénovation de circuits BT/MT, nouvelles installations, câblage et éclairage industriel. Solutions complètes pour l'industrie.",
+      "features": {
+        "f1": "Installations BT/MT",
+        "f2": "Câblage industriel",
+        "f3": "Éclairage technique",
+        "f4": "Maintenance préventive"
+      }
+    },
+    "airport": {
+      "title": "Balisage d'Aéroports",
+      "desc": "Étude, réalisation et maintenance de l'éclairage des aérodromes et équipements spécialisés d'aéroport.",
+      "features": {
+        "f1": "Balisage lumineux",
+        "f2": "Éclairage de piste",
+        "f3": "Signalisation aéroportuaire",
+        "f4": "Maintenance spécialisée"
+      }
+    },
+    "equipment": {
+      "title": "Fourniture d'Équipements",
+      "desc": "Spécialiste en groupes électrogènes haute capacité (10-3500 KVA) et systèmes de protection énergétique.",
+      "features": {
+        "f1": "Groupes électrogènes",
+        "f2": "Onduleurs (UPS)",
+        "f3": "Stabilisateurs de tension",
+        "f4": "Armoires électriques"
+      }
+    },
+    "ctaTitle": "Plus de détails sur nos Activités ?",
+    "ctaPhone": "Appelez-nous sur :",
+    "ctaButton": "Nous Contacter"
+  },
+  "products": {
+    "sectionTag": "Nos Produits",
+    "title": "Catalogue Produits",
+    "subtitle": "Découvrez notre gamme complète d'équipements électriques de haute qualité",
+    "categories": {
+      "all": "Tous",
+      "generators": "Groupes Électrogènes",
+      "ups": "Onduleurs",
+      "stabilizers": "Stabilisateurs de Tension"
+    },
+    "viewDetails": "Voir les détails",
+    "downloadCatalog": "Télécharger le catalogue"
+  },
+  "clients": {
+    "sectionTag": "Nos Partenaires",
+    "title": "Ils Nous Font Confiance",
+    "subtitle": "Des entreprises de renom nous font confiance pour leurs besoins en solutions électriques"
+  },
+  "contact": {
+    "sectionTag": "Contactez-nous",
+    "title": "Restons en Contact",
+    "subtitle": "N'hésitez pas à nous contacter pour toute demande d'information ou de fiche technique",
+    "form": {
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "phone": "Téléphone",
+      "subject": "Sujet",
+      "message": "Message",
+      "send": "Envoyer le message"
+    },
+    "info": {
+      "address": "Adresse",
+      "addressValue": "Deli Ibrahim, Dely Brahim – Alger, Algérie",
+      "phone": "Téléphone",
+      "phoneValue": "+213 (0) 23.11.67.60/68",
+      "mobile": "+213 (0) 551.99.55.68",
+      "email": "E-mail",
+      "emailValue": "contact@entrelec.dz",
+      "emailValue2": "entrelecdz@yahoo.fr",
+      "commercial": "Service Commercial",
+      "commercialValue": "+213 (0) 551.99.55.68",
+      "technical": "Service Technique",
+      "technicalValue": "+213 (0) 550.58.74.63"
+    }
+  },
+  "footer": {
+    "description": "ENTRELEC est une SARL de droit Algérien fondée en 1997, consacrée essentiellement à l'industrie électrique.",
+    "navigation": "Navigation",
+    "categories": "Nos Catégories",
+    "headquarters": "Siège Social",
+    "rights": "Tous droits réservés",
+    "cat": {
+      "stabilizers": "Stabilisateurs de Tension",
+      "airport": "Équipements d'Aéroport",
+      "generators": "Groupes Électrogènes",
+      "augier": "Augier Energy",
+      "ups": "Onduleurs"
+    }
+  },
+  "common": {
+    "learnMore": "En savoir plus",
+    "contactUs": "Nous contacter",
+    "since": "Depuis 1997"
+  }
+}
