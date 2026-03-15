@@ -38,7 +38,11 @@
       "projects": "Projets réalisés",
       "clients": "Clients fidèles",
       "coverage": "Couverture nationale"
-    }
+    },
+    "valuesTag": "Nos Valeurs",
+    "ctaTitle": "Vous avez un projet ?",
+    "ctaSubtitle": "Contactez-nous aujourd'hui",
+    "ctaBtn": "Nous Contacter"
   },
   "services": {
     "sectionTag": "Nos Services",
@@ -77,7 +81,63 @@
     "ctaTitle": "Besoin de maintenance pour vos équipements lourds ?",
     "ctaPhone": "Appelez-nous au",
     "ctaButton": "Nous Contacter",
-    "learnMore": "En savoir plus"
+    "learnMore": "En savoir plus",
+    "allServices": "Tous les services",
+    "overview": "Présentation",
+    "whatWeOffer": "Nos prestations",
+    "details": "Détails",
+    "requestService": "Demander un service",
+    "callNow": "Appeler",
+    "interestedCta": "Intéressé par ce service ?",
+    "notFound": "Service introuvable",
+    "backToServices": "Retour aux services",
+    "detail": {
+      "truck-maintenance": {
+        "title": "Maintenance de Camions",
+        "subtitle": "Entretien professionnel pour poids lourds",
+        "longDesc": "NASMO fournit des services complets de maintenance de camions avec plus de 10 ans d'expérience. Notre équipe de techniciens qualifiés gère tout, du diagnostic moteur et des réparations mécaniques à la maintenance préventive et l'entretien complet de flottes. Nous travaillons avec de grandes entreprises telles que GCB et Cosider.",
+        "f1": "Diagnostics moteur", "f1d": "Outils de diagnostic avancés pour identifier et résoudre les problèmes moteur",
+        "f2": "Maintenance préventive", "f2d": "Programmes de maintenance planifiés pour prévenir les pannes",
+        "f3": "Réparations mécaniques", "f3d": "Services de réparation complets : transmission, freins et suspension",
+        "f4": "Entretien de flottes", "f4d": "Programmes dédiés de gestion et maintenance de flottes",
+        "f5": "Systèmes électriques", "f5d": "Diagnostic et réparation des systèmes électriques",
+        "f6": "Fourniture de pièces", "f6d": "Pièces de rechange de qualité pour toutes les marques",
+        "s1l": "Expérience", "s1v": "10+ ans",
+        "s2l": "Couverture", "s2v": "Toute l'Algérie",
+        "s3l": "Disponibilité", "s3v": "Urgence 24/7",
+        "s4l": "Clients", "s4v": "GCB, Cosider et plus"
+      },
+      "construction-equipment": {
+        "title": "Engins de Chantier",
+        "subtitle": "Maintenir vos équipements de construction en marche",
+        "longDesc": "NASMO est spécialisée dans la maintenance et la réparation d'engins de chantier utilisés dans les grands projets d'infrastructure et de construction. Nos techniciens expérimentés entretiennent pelleteuses, bulldozers, grues, chargeuses et autres équipements lourds.",
+        "f1": "Réparation moteur", "f1d": "Révision complète des moteurs pour tous types d'engins",
+        "f2": "Systèmes hydrauliques", "f2d": "Inspection, réparation et maintenance des composants hydrauliques",
+        "f3": "Entretien d'équipements", "f3d": "Entretien régulier pour maintenir les performances optimales",
+        "f4": "Inspections préventives", "f4d": "Inspections planifiées pour prévenir les pannes",
+        "f5": "Réparation de train de roulement", "f5d": "Maintenance du système de chenilles",
+        "f6": "Soudure et fabrication", "f6d": "Réparations structurelles et fabrication sur mesure",
+        "s1l": "Types d'équipements", "s1v": "Toutes marques",
+        "s2l": "Temps de réponse", "s2v": "< 24 heures",
+        "s3l": "Couverture", "s3v": "Nationale",
+        "s4l": "Partenariats", "s4v": "GCB, Cosider"
+      },
+      "mobile-service": {
+        "title": "Service Mobile",
+        "subtitle": "Réparations sur site partout en Algérie",
+        "longDesc": "Le service de maintenance mobile de NASMO apporte notre expertise directement sur votre chantier. Nos véhicules de service entièrement équipés transportent les outils, équipements de diagnostic et pièces nécessaires pour effectuer la plupart des réparations sur site.",
+        "f1": "Réparations sur site", "f1d": "Services de réparation complets sur votre chantier",
+        "f2": "Intervention d'urgence", "f2d": "Déploiement rapide pour les pannes urgentes",
+        "f3": "Couverture nationale", "f3d": "Équipes mobiles prêtes à se déplacer en Algérie",
+        "f4": "Véhicules équipés", "f4d": "Véhicules de service entièrement équipés",
+        "f5": "Visites planifiées", "f5d": "Visites de maintenance régulières sur site",
+        "f6": "Diagnostic à distance", "f6d": "Diagnostic téléphonique avant intervention",
+        "s1l": "Couverture", "s1v": "Toute l'Algérie",
+        "s2l": "Réponse", "s2v": "Même jour",
+        "s3l": "Horaires", "s3v": "Disponible 24/7",
+        "s4l": "Flotte", "s4v": "Unités mobiles équipées"
+      }
+    }
   },
   "products": {
     "sectionTag": "Expérience & Clients",

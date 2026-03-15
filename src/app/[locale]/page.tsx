@@ -30,9 +30,9 @@ function Hero() {
   const [current, setCurrent] = useState(0);
 
   const slides = [
-    { title: t("slide1Title"), desc: t("slide1Desc"), img: "/images/hero-industrial.png" },
-    { title: t("slide2Title"), desc: t("slide2Desc"), img: "/images/hero-airport.png" },
-    { title: t("slide3Title"), desc: t("slide3Desc"), img: "/images/hero-generators.png" },
+    { title: t("slide1Title"), desc: t("slide1Desc"), img: "/images/hero1.jpg" },
+    { title: t("slide2Title"), desc: t("slide2Desc"), img: "/images/hero2.jpg" },
+    { title: t("slide3Title"), desc: t("slide3Desc"), img: "/images/hero3.jpg" },
   ];
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function Hero() {
       ))}
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
 
       {/* Content */}
       <div className="relative z-10 h-full container flex flex-col justify-end pb-20 lg:pb-28">
@@ -89,10 +89,45 @@ function Hero() {
         </div>
       </div>
 
-      {/* Bottom gradient */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-bg to-transparent z-[5]" />
     </section>
   );
+}
+
+/* ══════════════════ COUNT UP ══════════════════ */
+function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started) setStarted(true);
+    }, { threshold: 0.5 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [started]);
+
+  useEffect(() => {
+    if (!started) return;
+    const duration = 2000;
+    const steps = 60;
+    const increment = target / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, duration / steps);
+    return () => clearInterval(timer);
+  }, [started, target]);
+
+  return <div ref={ref} className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-orange tabular-nums mb-1 min-w-[70px] sm:min-w-[80px]">{count}{suffix}</div>;
 }
 
 /* ══════════════════ STATS ══════════════════ */
@@ -100,26 +135,28 @@ function Stats() {
   const t = useTranslations("about");
 
   const stats = [
-    { number: "10+", label: t("stats.years") },
-    { number: "500+", label: t("stats.projects") },
-    { number: "50+", label: t("stats.clients") },
-    { number: "48", label: t("stats.coverage") },
+    { target: 10, suffix: "+", label: t("stats.years") },
+    { target: 500, suffix: "+", label: t("stats.projects") },
+    { target: 50, suffix: "+", label: t("stats.clients") },
+    { target: 48, suffix: "", label: t("stats.coverage") },
   ];
 
   return (
-    <section className="section bg-bg relative">
+    <section className="py-14 lg:py-20 bg-bg relative overflow-hidden">
       <div className="container">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
           {stats.map((s, i) => (
-            <AnimatedSection key={i}>
-              <div className="text-center lg:text-left">
-                <div className="stat-number mb-3">{s.number}</div>
-                <div className="text-txtsec text-sm font-medium uppercase tracking-wider">{s.label}</div>
-              </div>
-              {i < stats.length - 1 && (
-                <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-16 bg-line" />
-              )}
-            </AnimatedSection>
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.6 }}
+              className={`text-center ${i < stats.length - 1 ? "lg:border-e lg:border-line/40" : ""}`}
+            >
+              <CountUp target={s.target} suffix={s.suffix} />
+              <div className="text-txtsec text-[.65rem] sm:text-[.7rem] font-medium uppercase tracking-[.15em] mt-1">{s.label}</div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -178,7 +215,7 @@ function Services() {
                     <Image src={s.img} alt={s.title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                     {/* Number overlay */}
-                    <div className="absolute top-6 left-6 text-[6rem] lg:text-[8rem] font-black text-white/[0.08] leading-none select-none">
+                    <div className="absolute top-4 left-4 z-20 text-[8rem] lg:text-[10rem] font-black text-orange/40 leading-none select-none pointer-events-none">
                       {s.num}
                     </div>
                   </div>
