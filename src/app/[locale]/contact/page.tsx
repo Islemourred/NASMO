@@ -1,26 +1,25 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { supabase } from "@/lib/supabase";
 
 export default function ContactPage() {
-  const t = useTranslations("contact");
   const locale = useLocale();
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [contactInfo, setContactInfo] = useState<{ label: string; value: string }[]>([]);
 
-  const contactInfo = [
-    { label: t("info.address"), value: t("info.addressValue") },
-    { label: t("info.phone"), value: t("info.phoneValue") },
-    { label: t("info.email"), value: t("info.emailValue") },
-    { label: t("info.technical"), value: t("info.technicalValue") },
-  ];
+  useEffect(() => {
+    supabase.from("site_content").select("key, value, label").eq("section", "contact").order("sort_order").then(({ data }) => {
+      if (data) setContactInfo(data.map(d => ({ label: d.label, value: d.value })));
+    });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,11 +55,11 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80" />
         <div className="relative z-10 h-full container flex flex-col justify-end pb-14">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
-            <div className="section-label text-white/40 mb-5">{t("sectionTag")}</div>
+            <div className="section-label text-white/40 mb-5">Contact</div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
-              {t("title")}
+              Contactez-nous
             </h1>
-            <p className="text-white/35 mt-4 max-w-lg text-base">{t("subtitle")}</p>
+            <p className="text-white/35 mt-4 max-w-lg text-base">Notre équipe est à votre écoute</p>
           </motion.div>
         </div>
       </section>
@@ -104,7 +103,7 @@ export default function ContactPage() {
                 <h2 className="text-xl font-extrabold text-txt mb-2 tracking-tight">
                   {locale === "ar" ? "أرسل لنا رسالة" : locale === "en" ? "Send us a message" : "Envoyez-nous un message"}
                 </h2>
-                <p className="text-txtmuted text-sm mb-8">{t("subtitle")}</p>
+                <p className="text-txtmuted text-sm mb-8">Notre équipe est à votre écoute pour tout renseignement</p>
 
                 {/* Success message */}
                 {sent && (
@@ -120,27 +119,27 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.name")}</label>
-                      <input type="text" required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder={t("form.name")} className="input" />
+                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Nom</label>
+                      <input type="text" required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Votre nom" className="input" />
                     </div>
                     <div>
-                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.email")}</label>
-                      <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder={t("form.email")} className="input" />
+                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Email</label>
+                      <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="votre@email.com" className="input" />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.phone")}</label>
-                      <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder={t("form.phone")} className="input" />
+                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Téléphone</label>
+                      <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="+213 5XX XX XX XX" className="input" />
                     </div>
                     <div>
-                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.subject")}</label>
-                      <input type="text" required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder={t("form.subject")} className="input" />
+                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Sujet</label>
+                      <input type="text" required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="Sujet de votre message" className="input" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.message")}</label>
-                    <textarea rows={5} required value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder={t("form.message")} className="input resize-none" />
+                    <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Message</label>
+                    <textarea rows={5} required value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Votre message..." className="input resize-none" />
                   </div>
                   <button type="submit" disabled={sending} className="btn btn-primary w-full disabled:opacity-70">
                     {sending ? (
@@ -149,11 +148,11 @@ export default function ContactPage() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                         </svg>
-                        {locale === "fr" ? "Envoi en cours..." : "Sending..."}
+                        Envoi en cours...
                       </div>
                     ) : (
                       <>
-                        {t("form.send")}
+                        Envoyer
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
                         </svg>

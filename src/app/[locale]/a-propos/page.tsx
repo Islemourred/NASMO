@@ -1,11 +1,13 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
+import { supabase } from "@/lib/supabase";
+import { useMultiSiteContent } from "@/lib/useContent";
 
 function useCounter(end: number, duration = 2000) {
   const [count, setCount] = useState(0);
@@ -25,7 +27,7 @@ function useCounter(end: number, duration = 2000) {
   return { count, ref };
 }
 
-function CounterStat({ val, suffix, label, delay }: { val: number; suffix: string; label: string; delay: number }) {
+function CounterStat({ val, suffix, label }: { val: number; suffix: string; label: string }) {
   const { count, ref } = useCounter(val);
   return (
     <div ref={ref} className="text-center">
@@ -36,15 +38,25 @@ function CounterStat({ val, suffix, label, delay }: { val: number; suffix: strin
 }
 
 export default function AboutPage() {
-  const t = useTranslations("about");
   const locale = useLocale();
+  const { content: c } = useMultiSiteContent(["about", "stats", "cta"]);
+  const about = c.about || {};
+  const cta = c.cta || {};
 
-  const stats = [
-    { val: 10, suffix: "+", label: t("stats.years") },
-    { val: 500, suffix: "+", label: t("stats.projects") },
-    { val: 50, suffix: "+", label: t("stats.clients") },
-    { val: 48, suffix: "", label: t("stats.coverage") },
-  ];
+  const [stats, setStats] = useState<{ val: number; suffix: string; label: string }[]>([]);
+
+  useEffect(() => {
+    supabase.from("site_content").select("key, value, label").eq("section", "stats").order("sort_order").then(({ data }) => {
+      if (data && data.length > 0) {
+        setStats(data.map(d => {
+          const numMatch = d.value.match(/^(\d+)/);
+          const val = numMatch ? parseInt(numMatch[1]) : 0;
+          const suffix = d.value.replace(/^\d+/, "");
+          return { val, suffix, label: d.label };
+        }));
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -55,34 +67,31 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80" />
         <div className="relative z-10 h-full container flex flex-col justify-end pb-16">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
-            <div className="section-label text-white/40 mb-5">{t("sectionTag")}</div>
+            <div className="section-label text-white/40 mb-5">{about.section_tag || "À propos"}</div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
-              {t("title")}
+              {about.title || "NASMO"}
             </h1>
-            <p className="text-white/35 mt-4 max-w-lg text-base">{t("description")}</p>
+            <p className="text-white/35 mt-4 max-w-lg text-base">{about.desc1 || ""}</p>
           </motion.div>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-14 lg:py-20 bg-bg border-b border-line">
-        <div className="container">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
-            {stats.map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-                className={`text-center ${i < stats.length - 1 ? "lg:border-e lg:border-line/40" : ""}`}
-              >
-                <CounterStat val={s.val} suffix={s.suffix} label={s.label} delay={0} />
-              </motion.div>
-            ))}
+      {stats.length > 0 && (
+        <section className="py-14 lg:py-20 bg-bg border-b border-line">
+          <div className="container">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
+              {stats.map((s, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
+                  className={`text-center ${i < stats.length - 1 ? "lg:border-e lg:border-line/40" : ""}`}>
+                  <CounterStat val={s.val} suffix={s.suffix} label={s.label} />
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Content */}
       <section className="section-lg bg-bg relative overflow-hidden">
@@ -91,23 +100,22 @@ export default function AboutPage() {
             <AnimatedSection>
               <div className="relative">
                 <div className="relative aspect-[4/5] overflow-hidden">
-                  <Image src="/images/about-team.png" alt="NASMO Team" fill sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover" />
+                  <Image src="/images/about-team.png" alt="NASMO Team" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
                 </div>
                 <div className="absolute -bottom-6 -right-6 lg:-right-10 bg-orange text-black p-6 lg:p-8">
-                  <div className="text-3xl lg:text-4xl font-black leading-none mb-1">10+</div>
-                  <div className="text-[.7rem] font-bold uppercase tracking-wider opacity-70">{t("yearsLabel")}</div>
+                  <div className="text-3xl lg:text-4xl font-black leading-none mb-1">{(c.stats || {}).years || "10+"}</div>
+                  <div className="text-[.7rem] font-bold uppercase tracking-wider opacity-70">{about.years_label || "Années d'expérience"}</div>
                 </div>
               </div>
             </AnimatedSection>
 
             <AnimatedSection>
-              <div className="section-label mb-6">{t("sectionTag")}</div>
-              <p className="text-txtsec text-[.92rem] leading-[1.9] mb-5">{t("description")}</p>
-              <p className="text-txtsec text-[.92rem] leading-[1.9] mb-8">{t("description2")}</p>
+              <div className="section-label mb-6">{about.section_tag || "À propos"}</div>
+              <p className="text-txtsec text-[.92rem] leading-[1.9] mb-5">{about.desc1 || ""}</p>
+              <p className="text-txtsec text-[.92rem] leading-[1.9] mb-8">{about.desc2 || ""}</p>
 
               <div className="space-y-4 mb-10">
-                {[t("service1"), t("service2"), t("service3")].map((s, i) => (
+                {[about.point1, about.point2, about.point3].filter(Boolean).map((s, i) => (
                   <div key={i} className="flex items-start gap-4">
                     <div className="w-5 h-5 rounded-full border-2 border-orange flex items-center justify-center flex-shrink-0 mt-0.5">
                       <div className="w-2 h-2 rounded-full bg-orange" />
@@ -116,40 +124,7 @@ export default function AboutPage() {
                   </div>
                 ))}
               </div>
-
-              <p className="text-txtsec text-[.88rem] leading-[1.85] mb-2">{t("expertise")}</p>
-              <p className="text-txt text-[.88rem] font-semibold">{t("coverage")}</p>
             </AnimatedSection>
-          </div>
-        </div>
-      </section>
-
-      {/* Values */}
-      <section className="section bg-bgalt border-t border-line">
-        <div className="container max-w-3xl">
-          <AnimatedSection>
-            <div className="text-center mb-14">
-              <div className="section-label justify-center mb-5">
-                {t("valuesTag")}
-              </div>
-              <h2 className="text-3xl font-extrabold text-txt tracking-tight">
-                {t("qualityTitle")} & {t("devTitle")}
-              </h2>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              { title: t("qualityTitle"), desc: t("qualityDesc") },
-              { title: t("devTitle"), desc: t("devDesc") },
-            ].map((v, i) => (
-              <AnimatedSection key={i}>
-                <div className="border-t-2 border-orange pt-6">
-                  <h3 className="font-bold text-txt text-lg mb-3">{v.title}</h3>
-                  <p className="text-txtsec text-[.88rem] leading-relaxed">{v.desc}</p>
-                </div>
-              </AnimatedSection>
-            ))}
           </div>
         </div>
       </section>
@@ -161,13 +136,11 @@ export default function AboutPage() {
         <div className="relative z-10 h-full container flex flex-col items-center justify-center text-center">
           <AnimatedSection>
             <h2 className="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">
-              {t("ctaTitle")}
+              {cta.heading || "Un projet ? Contactez notre équipe."}
             </h2>
-            <p className="text-white/35 mb-8">
-              {t("ctaSubtitle")}
-            </p>
+            <p className="text-white/35 mb-8">Notre équipe est à votre disposition</p>
             <Link href={`/${locale}/contact`} className="btn btn-primary">
-              {t("ctaBtn")}
+              Contactez-nous
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
               </svg>
