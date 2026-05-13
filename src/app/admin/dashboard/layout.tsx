@@ -21,14 +21,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen flex bg-[var(--bg)]">
       {/* Sidebar */}
-      <aside className={`${collapsed ? "w-[72px]" : "w-[260px]"} flex-shrink-0 bg-[#0a1529] border-r border-white/[0.06] flex flex-col transition-all duration-300`}>
+      <aside className={`${collapsed ? "w-[72px]" : "w-[260px]"} flex-shrink-0 bg-[var(--navy-dark)] border-r border-[var(--border)] flex flex-col transition-all duration-300`}>
         {/* Header */}
-        <div className="h-16 flex items-center px-4 border-b border-white/[0.06] gap-2">
+        <div className="h-16 flex items-center px-4 border-b border-[var(--border)] gap-2">
           {!collapsed && (
             <Image src="/main_logo.png" alt="NASMO" width={110} height={28} className="h-6 w-auto brightness-0 invert" />
           )}
-          <button onClick={() => setCollapsed(!collapsed)} className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-white/[0.08] transition-colors ml-auto">
-            <svg className={`w-4 h-4 text-white/40 transition-transform ${collapsed ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <button onClick={() => setCollapsed(!collapsed)} className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center hover:bg-[var(--orange)]/10 transition-colors ml-auto">
+            <svg className={`w-4 h-4 text-[var(--text-muted)] transition-transform ${collapsed ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
             </svg>
           </button>
@@ -42,10 +42,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link key={n.href} href={n.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[.82rem] font-medium transition-all duration-200 ${
                   active
-                    ? "bg-orange/10 text-orange border border-orange/15"
-                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.04] border border-transparent"
+                    ? "bg-[var(--orange)]/10 text-[var(--orange)] border border-[var(--orange)]/15"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-white/[0.04] border border-transparent"
                 }`}>
-                <svg className={`w-[18px] h-[18px] flex-shrink-0 ${active ? "text-orange" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <svg className={`w-[18px] h-[18px] flex-shrink-0 ${active ? "text-[var(--orange)]" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d={n.icon} />
                 </svg>
                 {!collapsed && <span>{n.label}</span>}
@@ -55,8 +55,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         {/* Footer */}
-        <div className="p-3 border-t border-white/[0.06]">
-          <Link href="/admin" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[.82rem] font-medium text-white/30 hover:text-red-400 hover:bg-red-500/[0.06] transition-all`}>
+        <div className="p-3 border-t border-[var(--border)]">
+          <Link href="/admin" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[.82rem] font-medium text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/[0.06] transition-all`}>
             <svg className="w-[18px] h-[18px] flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
             </svg>

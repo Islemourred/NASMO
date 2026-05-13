@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { Providers } from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Chatbot from "@/components/Chatbot";
 
 export async function generateMetadata({
   params,
@@ -55,29 +56,20 @@ export default async function LocaleLayout({
   const dir = locale === "ar" ? "rtl" : "ltr";
 
   return (
-    <html lang={locale} dir={dir} suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/tab_icon.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body suppressHydrationWarning>
-        <Providers>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-          </NextIntlClientProvider>
-        </Providers>
-      </body>
-    </html>
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang="${locale}";document.documentElement.dir="${dir}";`,
+        }}
+      />
+      <Providers>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <Chatbot />
+        </NextIntlClientProvider>
+      </Providers>
+    </>
   );
 }
