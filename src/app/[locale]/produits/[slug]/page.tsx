@@ -5,9 +5,20 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
-import { products } from "../page";
+import { supabase } from "@/lib/supabase";
+
+interface Product {
+  slug: string;
+  name: string;
+  category: string;
+  sub_category: string;
+  description: string;
+  power: string;
+  image_url: string;
+  brand: string;
+}
 
 const specsData: Record<string, { label: string; value: string }[]> = {
   "dlt-srv-33hi": [
@@ -31,11 +42,30 @@ export default function ProductDetailPage() {
   const locale = useLocale();
   const params = useParams();
   const slug = params.slug as string;
-  const product = products.find(p => p.slug === slug);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [related, setRelated] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", quantity: "1", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await supabase.from("products").select("*").eq("slug", slug).single();
+      if (data) {
+        setProduct(data);
+        const { data: rel } = await supabase.from("products").select("*").eq("category", data.category).neq("slug", slug).eq("active", true).limit(3);
+        setRelated(rel ?? []);
+      }
+      setLoading(false);
+    };
+    fetchProduct();
+  }, [slug]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center"><svg className="w-6 h-6 animate-spin text-orange" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg></div>;
+  }
 
   if (!product) {
     return (
@@ -49,25 +79,28 @@ export default function ProductDetailPage() {
   }
 
   const specs = specsData[slug] || [
-    { label: "Catégorie", value: product.cat === "stabilisateurs" ? "Stabilisateur" : product.cat === "groupes" ? "Groupe Électrogène" : product.cat === "onduleurs" ? "Onduleur" : product.cat === "augier" ? "Augier Energy" : "Aéroport" },
-    { label: "Sous-catégorie", value: product.sub },
+    { label: "Catégorie", value: product.category === "stabilisateurs" ? "Stabilisateur" : product.category === "groupes" ? "Groupe Électrogène" : product.category === "onduleurs" ? "Onduleur" : product.category === "augier" ? "Augier Energy" : "Variateur" },
+    { label: "Sous-catégorie", value: product.sub_category },
     { label: "Puissance", value: product.power },
     { label: "Marque", value: product.brand },
   ];
 
-  const related = products.filter(p => p.cat === product.cat && p.slug !== slug).slice(0, 3);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      setSubmitted(true);
-    }, 1500);
+    await supabase.from("messages").insert({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      subject: `Demande fiche technique - ${product.name}`,
+      message: `Produit: ${product.name}\nMarque: ${product.brand}\nPuissance: ${product.power}\nEntreprise: ${formData.company}\nQuantité: ${formData.quantity}\n\n${formData.message}`,
+    });
+    setSending(false);
+    setSubmitted(true);
   };
 
   const catLabels: Record<string, string> = {
-    stabilisateurs: "Stabilisateurs", groupes: "Groupes Électrogènes", onduleurs: "Onduleurs", augier: "Augier Energy", aeroport: "Aéroport",
+    stabilisateurs: "Stabilisateurs", groupes: "Groupes Électrogènes", onduleurs: "Onduleurs", augier: "Augier Energy", variateurs: "Variateurs",
   };
 
   return (
@@ -85,10 +118,10 @@ export default function ProductDetailPage() {
             </Link>
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <span className="text-[.65rem] font-semibold px-3 py-1 rounded-full bg-white/10 text-white/50 border border-white/10">
-                {catLabels[product.cat]}
+                {catLabels[product.category]}
               </span>
               <span className="text-[.65rem] font-medium px-2.5 py-1 rounded-full bg-orange/10 text-orange border border-orange/15">
-                {product.sub}
+                {product.sub_category}
               </span>
               <span className="text-[.65rem] font-medium text-white/30">{product.brand}</span>
             </div>
@@ -104,7 +137,7 @@ export default function ProductDetailPage() {
             {/* Image */}
             <AnimatedSection>
               <div className="relative rounded-2xl overflow-hidden bg-bgalt border border-line p-8 lg:p-12 flex items-center justify-center aspect-square max-h-[500px]">
-                <Image src={product.img} alt={product.name} width={350} height={350}
+                <Image src={product.image_url} alt={product.name} width={350} height={350}
                   className="object-contain drop-shadow-2xl" />
                 <div className="absolute top-5 right-5 w-10 h-10 rounded-full bg-orange/10 flex items-center justify-center">
                   <svg className="w-5 h-5 text-orange" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -118,7 +151,7 @@ export default function ProductDetailPage() {
             <AnimatedSection delay={.15}>
               <div>
                 <h1 className="text-2xl lg:text-3xl font-extrabold text-txt tracking-tight mb-2">{product.name}</h1>
-                <p className="text-txtsec text-[.95rem] leading-relaxed mb-6">{product.desc}</p>
+                <p className="text-txtsec text-[.95rem] leading-relaxed mb-6">{product.description}</p>
 
                 {product.power !== "-" && (
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-orange/5 border border-orange/10 mb-6">
@@ -198,7 +231,7 @@ export default function ProductDetailPage() {
                   <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Product badge */}
                     <div className="flex items-center gap-3 p-3 rounded-xl bg-bgalt border border-line">
-                      <Image src={product.img} alt="" width={40} height={40} className="object-contain" />
+                      <Image src={product.image_url} alt="" width={40} height={40} className="object-contain" />
                       <div>
                         <div className="text-[.82rem] font-semibold text-txt">{product.name}</div>
                         <div className="text-[.7rem] text-txtmuted">{product.brand} | {product.power}</div>
@@ -280,7 +313,7 @@ export default function ProductDetailPage() {
                     <Link key={p.slug} href={`/${locale}/produits/${p.slug}`}>
                       <div className="card group cursor-pointer overflow-hidden hover:shadow-xl">
                         <div className="relative h-40 flex items-center justify-center bg-bgalt p-4">
-                          <Image src={p.img} alt={p.name} width={120} height={120}
+                          <Image src={p.image_url} alt={p.name} width={120} height={120}
                             className="object-contain transition-transform group-hover:scale-110" />
                         </div>
                         <div className="p-4 border-t border-line text-center">

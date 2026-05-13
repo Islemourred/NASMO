@@ -3,11 +3,17 @@
 import { useTranslations, useLocale } from "next-intl";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
+import { supabase } from "@/lib/supabase";
 
 export default function ContactPage() {
   const t = useTranslations("contact");
   const locale = useLocale();
+  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   const contactInfo = [
     { label: t("info.address"), value: t("info.addressValue") },
@@ -15,6 +21,31 @@ export default function ContactPage() {
     { label: t("info.email"), value: t("info.emailValue") },
     { label: t("info.technical"), value: t("info.technicalValue") },
   ];
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    setError("");
+
+    const { error: dbError } = await supabase.from("messages").insert({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      subject: form.subject,
+      message: form.message,
+    });
+
+    if (dbError) {
+      setError(locale === "fr" ? "Erreur lors de l'envoi. Veuillez réessayer." : "Error sending message. Please try again.");
+      setSending(false);
+      return;
+    }
+
+    setSent(true);
+    setSending(false);
+    setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+    setTimeout(() => setSent(false), 5000);
+  };
 
   return (
     <>
@@ -74,36 +105,60 @@ export default function ContactPage() {
                   {locale === "ar" ? "أرسل لنا رسالة" : locale === "en" ? "Send us a message" : "Envoyez-nous un message"}
                 </h2>
                 <p className="text-txtmuted text-sm mb-8">{t("subtitle")}</p>
-                <form className="space-y-5">
+
+                {/* Success message */}
+                {sent && (
+                  <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 text-green-400 text-[.84rem] rounded-lg">
+                    {locale === "fr" ? "Message envoyé avec succès ! Nous vous répondrons bientôt." : "Message sent successfully! We'll get back to you soon."}
+                  </div>
+                )}
+
+                {error && (
+                  <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-[.84rem] rounded-lg">{error}</div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.name")}</label>
-                      <input type="text" placeholder={t("form.name")} className="input" />
+                      <input type="text" required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder={t("form.name")} className="input" />
                     </div>
                     <div>
                       <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.email")}</label>
-                      <input type="email" placeholder={t("form.email")} className="input" />
+                      <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder={t("form.email")} className="input" />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.phone")}</label>
-                      <input type="tel" placeholder={t("form.phone")} className="input" />
+                      <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder={t("form.phone")} className="input" />
                     </div>
                     <div>
                       <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.subject")}</label>
-                      <input type="text" placeholder={t("form.subject")} className="input" />
+                      <input type="text" required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder={t("form.subject")} className="input" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">{t("form.message")}</label>
-                    <textarea rows={5} placeholder={t("form.message")} className="input resize-none" />
+                    <textarea rows={5} required value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder={t("form.message")} className="input resize-none" />
                   </div>
-                  <button type="submit" className="btn btn-primary w-full">
-                    {t("form.send")}
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-                    </svg>
+                  <button type="submit" disabled={sending} className="btn btn-primary w-full disabled:opacity-70">
+                    {sending ? (
+                      <div className="flex items-center gap-2">
+                        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        </svg>
+                        {locale === "fr" ? "Envoi en cours..." : "Sending..."}
+                      </div>
+                    ) : (
+                      <>
+                        {t("form.send")}
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                        </svg>
+                      </>
+                    )}
                   </button>
                 </form>
               </div>

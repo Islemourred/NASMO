@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
+import { supabase } from "@/lib/supabase";
 
 const fade = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
 
@@ -169,21 +170,13 @@ function Stats() {
 function Services() {
   const t = useTranslations("services");
   const locale = useLocale();
+  const [items, setItems] = useState<{ id: string; title: string; description: string; image_url: string }[]>([]);
 
-  const items = [
-    {
-      slug: "truck-maintenance", title: t("electrical.title"), desc: t("electrical.desc"),
-      img: "/images/service-electrical.png", num: "01",
-    },
-    {
-      slug: "construction-equipment", title: t("airport.title"), desc: t("airport.desc"),
-      img: "/images/service-airport.png", num: "02",
-    },
-    {
-      slug: "mobile-service", title: t("equipment.title"), desc: t("equipment.desc"),
-      img: "/images/service-equipment.png", num: "03",
-    },
-  ];
+  useEffect(() => {
+    supabase.from("services").select("id, title, description, image_url").eq("active", true).order("sort_order").then(({ data }) => {
+      setItems(data ?? []);
+    });
+  }, []);
 
   return (
     <section className="bg-bgalt relative overflow-hidden">
@@ -205,33 +198,34 @@ function Services() {
       </div>
 
       {/* Service cards - full-width alternating */}
-      {items.map((s, i) => (
-        <div key={i} className="border-t border-line">
+      {items.map((s, i) => {
+        const num = String(i + 1).padStart(2, "0");
+        return (
+        <div key={s.id} className="border-t border-line">
           <div className="container">
             <AnimatedSection>
               <div className={`grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[500px] ${i % 2 === 1 ? "direction-reverse" : ""}`}>
                 {/* Image */}
                 <div className={`relative overflow-hidden ${i % 2 === 1 ? "lg:order-2" : ""}`}>
                   <div className="relative h-[300px] lg:h-full w-full">
-                    <Image src={s.img} alt={s.title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
+                    <Image src={s.image_url || "/images/service-electrical.png"} alt={s.title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                    {/* Number overlay */}
                     <div className="absolute top-4 left-4 z-20 text-[8rem] lg:text-[10rem] font-black text-orange/40 leading-none select-none pointer-events-none">
-                      {s.num}
+                      {num}
                     </div>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className={`flex flex-col justify-center p-8 lg:p-16 ${i % 2 === 1 ? "lg:order-1" : ""}`}>
-                  <div className="section-label mb-5">Service {s.num}</div>
+                  <div className="section-label mb-5">Service {num}</div>
                   <h3 className="text-2xl lg:text-3xl font-extrabold text-txt tracking-tight mb-5 leading-tight">
                     {s.title}
                   </h3>
                   <p className="text-txtsec text-[.92rem] leading-[1.85] mb-8 max-w-md">
-                    {s.desc}
+                    {s.description}
                   </p>
-                  <Link href={`/${locale}/services/${s.slug}`}
+                  <Link href={`/${locale}/services`}
                     className="inline-flex items-center gap-3 text-orange text-[.8rem] font-semibold uppercase tracking-wider group">
                     {t("learnMore")}
                     <span className="w-8 h-px bg-orange group-hover:w-12 transition-all" />
@@ -241,7 +235,8 @@ function Services() {
             </AnimatedSection>
           </div>
         </div>
-      ))}
+        );
+      })}
     </section>
   );
 }
