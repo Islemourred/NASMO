@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 const nav = [
   { href: "/admin/dashboard", label: "Tableau de bord", icon: "M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" },
@@ -16,7 +17,50 @@ const nav = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/admin");
+        return;
+      }
+      setUserEmail(session.user.email ?? null);
+      setLoading(false);
+    };
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        router.push("/admin");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [router]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/admin");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg)]">
+        <div className="flex flex-col items-center gap-3">
+          <svg className="w-8 h-8 animate-spin text-orange" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+          <span className="text-txtmuted text-[.8rem]">Chargement...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex bg-[var(--bg)]">
@@ -56,12 +100,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Footer */}
         <div className="p-3 border-t border-[var(--border)]">
-          <Link href="/admin" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[.82rem] font-medium text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/[0.06] transition-all`}>
+          <button onClick={handleLogout} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[.82rem] font-medium text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/[0.06] transition-all`}>
             <svg className="w-[18px] h-[18px] flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
             </svg>
             {!collapsed && <span>Déconnexion</span>}
-          </Link>
+          </button>
         </div>
       </aside>
 
@@ -88,14 +132,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <input type="text" placeholder="Rechercher..." className="bg-transparent text-[.78rem] text-[var(--text-primary)] placeholder:text-txtmuted outline-none w-36 lg:w-48" />
             </div>
 
-            {/* Notification bell */}
-            <button className="relative w-9 h-9 rounded-xl bg-[var(--bg-alt)] border border-[var(--border)] flex items-center justify-center hover:bg-orange/5 hover:border-orange/15 transition-all">
-              <svg className="w-4 h-4 text-txtsec" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-              </svg>
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-orange rounded-full flex items-center justify-center text-[.55rem] text-white font-bold">5</span>
-            </button>
-
             {/* Date */}
             <div className="hidden lg:flex flex-col items-end">
               <span className="text-[.72rem] text-[var(--text-primary)] font-medium">
@@ -118,11 +154,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* Profile */}
             <div className="flex items-center gap-2.5 cursor-pointer group">
-              <Image src="/images/admin-avatar.png" alt="Admin" width={32} height={32}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-orange/20" />
+              <div className="w-8 h-8 rounded-full bg-orange/10 flex items-center justify-center ring-2 ring-orange/20">
+                <span className="text-[.65rem] font-bold text-orange">A</span>
+              </div>
               <div className="hidden md:block">
                 <div className="text-[.78rem] font-semibold text-[var(--text-primary)] group-hover:text-orange transition-colors leading-tight">Admin</div>
-                <div className="text-[.65rem] text-txtmuted leading-tight">Administrateur</div>
+                <div className="text-[.65rem] text-txtmuted leading-tight truncate max-w-[120px]">{userEmail}</div>
               </div>
             </div>
           </div>

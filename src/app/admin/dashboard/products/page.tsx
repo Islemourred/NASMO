@@ -1,52 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 
-const initialProducts = [
-  { id: 1, name: "CYCLONE CL 100D", cat: "UPS", desc: "Onduleur haute performance pour protection électrique continue", img: "/images/product-cyclone.png", active: true },
-  { id: 2, name: "Delta 200 Series UPS", cat: "UPS", desc: "Système UPS modulaire pour datacenters", img: "/images/product-delta.png", active: true },
-  { id: 3, name: "DLT SRV 33Hi", cat: "Stabilisateurs", desc: "Stabilisateur triphasé industriel", img: "/images/product-stabilizer.png", active: true },
-  { id: 4, name: "EMB-2800", cat: "Groupes Électrogènes", desc: "Groupe électrogène 2800 KVA", img: "/images/product-emb2800.png", active: true },
-  { id: 5, name: "EMB1400 INSO", cat: "Groupes Électrogènes", desc: "Groupe insonorisé 1400 KVA", img: "/images/product-emb1400.png", active: false },
-  { id: 6, name: "EMT 3125", cat: "Groupes Électrogènes", desc: "Groupe industriel 3125 KVA", img: "/images/product-emt3125.png", active: true },
-];
+interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  category: string;
+  sub_category: string;
+  description: string;
+  power: string;
+  image_url: string;
+  brand: string;
+  active: boolean;
+}
+
+const catOptions = ["stabilisateurs", "variateurs", "groupes", "onduleurs", "augier"];
 
 export default function ProductsAdminPage() {
-  const [products, setProducts] = useState(initialProducts);
-  const [editId, setEditId] = useState<number | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [editId, setEditId] = useState<string | null>(null);
   const [showAdd, setShowAdd] = useState(false);
   const [search, setSearch] = useState("");
-  const [newProduct, setNewProduct] = useState({ name: "", cat: "UPS", desc: "", img: "/images/product-cyclone.png" });
+  const [loading, setLoading] = useState(true);
+  const [newProduct, setNewProduct] = useState({ name: "", category: "onduleurs", sub_category: "", description: "", power: "", image_url: "/images/product-cyclone.png", brand: "" });
 
-  const filtered = products.filter(p => p.name.toLowerCase().includes(search.toLowerCase()) || p.cat.toLowerCase().includes(search.toLowerCase()));
+  const fetchProducts = async () => {
+    const { data } = await supabase.from("products").select("*").order("sort_order");
+    setProducts(data ?? []);
+    setLoading(false);
+  };
 
-  const toggleActive = (id: number) => {
+  useEffect(() => { fetchProducts(); }, []);
+
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(search.toLowerCase()) ||
+    p.category.toLowerCase().includes(search.toLowerCase()) ||
+    p.brand.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const toggleActive = async (id: string, current: boolean) => {
+    await supabase.from("products").update({ active: !current }).eq("id", id);
     setProducts(products.map(p => p.id === id ? { ...p, active: !p.active } : p));
   };
 
-  const deleteProduct = (id: number) => {
+  const deleteProduct = async (id: string) => {
+    await supabase.from("products").delete().eq("id", id);
     setProducts(products.filter(p => p.id !== id));
   };
 
-  const addProduct = () => {
+  const addProduct = async () => {
     if (!newProduct.name) return;
-    setProducts([...products, { ...newProduct, id: Date.now(), active: true }]);
-    setNewProduct({ name: "", cat: "UPS", desc: "", img: "/images/product-cyclone.png" });
+    const slug = newProduct.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    const { data } = await supabase.from("products").insert({
+      ...newProduct, slug, active: true, sort_order: products.length + 1,
+    }).select().single();
+    if (data) setProducts([...products, data]);
+    setNewProduct({ name: "", category: "onduleurs", sub_category: "", description: "", power: "", image_url: "/images/product-cyclone.png", brand: "" });
     setShowAdd(false);
   };
 
-  const saveEdit = (id: number, field: string, value: string) => {
+  const saveEdit = async (id: string, field: string, value: string) => {
+    await supabase.from("products").update({ [field]: value }).eq("id", id);
     setProducts(products.map(p => p.id === id ? { ...p, [field]: value } : p));
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <svg className="w-6 h-6 animate-spin text-orange" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-extrabold text-[var(--text-primary)] tracking-tight">Produits</h1>
-          <p className="text-txtmuted text-[.84rem] mt-1">Gérez votre catalogue de produits</p>
+          <p className="text-txtmuted text-[.84rem] mt-1">Gérez votre catalogue de produits ({products.length})</p>
         </div>
         <button onClick={() => setShowAdd(true)} className="btn btn-primary text-[.8rem]">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -71,23 +109,31 @@ export default function ProductsAdminPage() {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
             className="card p-6 border-orange/20">
             <h3 className="font-bold text-[var(--text-primary)] mb-4">Nouveau produit</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
               <div>
                 <label className="block text-txtsec text-[.7rem] font-semibold uppercase tracking-wider mb-1.5">Nom</label>
                 <input className="input" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} placeholder="Nom du produit" />
               </div>
               <div>
                 <label className="block text-txtsec text-[.7rem] font-semibold uppercase tracking-wider mb-1.5">Catégorie</label>
-                <select className="input" value={newProduct.cat} onChange={e => setNewProduct({ ...newProduct, cat: e.target.value })}>
-                  <option>UPS</option>
-                  <option>Stabilisateurs</option>
-                  <option>Groupes Électrogènes</option>
+                <select className="input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                  {catOptions.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
+              <div>
+                <label className="block text-txtsec text-[.7rem] font-semibold uppercase tracking-wider mb-1.5">Marque</label>
+                <input className="input" value={newProduct.brand} onChange={e => setNewProduct({ ...newProduct, brand: e.target.value })} placeholder="DELTA, NASMO..." />
+              </div>
             </div>
-            <div className="mb-4">
-              <label className="block text-txtsec text-[.7rem] font-semibold uppercase tracking-wider mb-1.5">Description</label>
-              <textarea className="input resize-none" rows={2} value={newProduct.desc} onChange={e => setNewProduct({ ...newProduct, desc: e.target.value })} placeholder="Description du produit" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-txtsec text-[.7rem] font-semibold uppercase tracking-wider mb-1.5">Puissance</label>
+                <input className="input" value={newProduct.power} onChange={e => setNewProduct({ ...newProduct, power: e.target.value })} placeholder="100 KVA" />
+              </div>
+              <div>
+                <label className="block text-txtsec text-[.7rem] font-semibold uppercase tracking-wider mb-1.5">Description</label>
+                <input className="input" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} placeholder="Description" />
+              </div>
             </div>
             <div className="flex gap-2">
               <button onClick={addProduct} className="btn btn-primary text-[.78rem]">Ajouter</button>
@@ -116,27 +162,30 @@ export default function ProductsAdminPage() {
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-[var(--bg-alt)] flex items-center justify-center overflow-hidden flex-shrink-0">
-                        <Image src={p.img} alt={p.name} width={32} height={32} className="object-contain" />
+                        <Image src={p.image_url} alt={p.name} width={32} height={32} className="object-contain" />
                       </div>
                       {editId === p.id ? (
                         <input className="input text-[.82rem]" value={p.name} onChange={e => saveEdit(p.id, "name", e.target.value)} style={{ padding: '.4rem .6rem' }} />
                       ) : (
-                        <span className="text-[.84rem] font-semibold text-[var(--text-primary)]">{p.name}</span>
+                        <div>
+                          <span className="text-[.84rem] font-semibold text-[var(--text-primary)] block">{p.name}</span>
+                          <span className="text-[.7rem] text-orange/60">{p.brand}</span>
+                        </div>
                       )}
                     </div>
                   </td>
                   <td className="p-4">
-                    <span className="text-[.72rem] px-2.5 py-1 rounded-full bg-[var(--surface-raised)] text-txtsec font-medium border border-[var(--border)]">{p.cat}</span>
+                    <span className="text-[.72rem] px-2.5 py-1 rounded-full bg-[var(--surface-raised)] text-txtsec font-medium border border-[var(--border)]">{p.category}</span>
                   </td>
                   <td className="p-4">
                     {editId === p.id ? (
-                      <input className="input text-[.82rem]" value={p.desc} onChange={e => saveEdit(p.id, "desc", e.target.value)} style={{ padding: '.4rem .6rem' }} />
+                      <input className="input text-[.82rem]" value={p.description} onChange={e => saveEdit(p.id, "description", e.target.value)} style={{ padding: '.4rem .6rem' }} />
                     ) : (
-                      <span className="text-[.82rem] text-txtmuted">{p.desc}</span>
+                      <span className="text-[.82rem] text-txtmuted">{p.description}</span>
                     )}
                   </td>
                   <td className="p-4">
-                    <button onClick={() => toggleActive(p.id)}
+                    <button onClick={() => toggleActive(p.id, p.active)}
                       className={`text-[.72rem] px-2.5 py-1 rounded-full font-semibold ${p.active ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>
                       {p.active ? "Actif" : "Inactif"}
                     </button>
