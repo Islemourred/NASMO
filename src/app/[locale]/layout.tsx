@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { Providers } from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import DirectionSync from "@/components/DirectionSync";
 import Chatbot from "@/components/Chatbot";
 
 export async function generateMetadata({
@@ -64,6 +65,7 @@ export default async function LocaleLayout({
       />
       <Providers>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <DirectionSync />
           <Navbar />
           <main>{children}</main>
           <Footer />

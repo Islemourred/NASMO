@@ -8,7 +8,7 @@ import ThemeToggle from "./ThemeToggle";
 import Link from "next/link";
 import Image from "next/image";
 
-const langs: Record<string, string> = { fr: "FR", en: "EN", ar: "AR" };
+const langs: Record<string, string> = { en: "EN", fr: "FR", ar: "AR" };
 
 export default function Navbar() {
   const t = useTranslations("nav");
@@ -50,6 +50,7 @@ export default function Navbar() {
     { href: `/${locale}`, label: t("home") },
     { href: `/${locale}/a-propos`, label: t("about") },
     { href: `/${locale}/services`, label: t("services") },
+    { href: `/${locale}/produits`, label: t("products") },
     { href: `/${locale}/contact`, label: t("contact") },
   ];
 

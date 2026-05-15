@@ -35,7 +35,7 @@ export default function ContactPage() {
     });
 
     if (dbError) {
-      setError(locale === "fr" ? "Erreur lors de l'envoi. Veuillez réessayer." : "Error sending message. Please try again.");
+      setError("Error sending message. Please try again.");
       setSending(false);
       return;
     }
@@ -57,9 +57,9 @@ export default function ContactPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
             <div className="section-label text-white/40 mb-5">Contact</div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
-              Contactez-nous
+              Contact Us
             </h1>
-            <p className="text-white/35 mt-4 max-w-lg text-base">Notre équipe est à votre écoute</p>
+            <p className="text-white/35 mt-4 max-w-lg text-base">Our team is here to help</p>
           </motion.div>
         </div>
       </section>
@@ -101,14 +101,14 @@ export default function ContactPage() {
             <AnimatedSection>
               <div className="bg-surface border border-line p-8 lg:p-10">
                 <h2 className="text-xl font-extrabold text-txt mb-2 tracking-tight">
-                  {locale === "ar" ? "أرسل لنا رسالة" : locale === "en" ? "Send us a message" : "Envoyez-nous un message"}
+                  Send us a message
                 </h2>
-                <p className="text-txtmuted text-sm mb-8">Notre équipe est à votre écoute pour tout renseignement</p>
+                <p className="text-txtmuted text-sm mb-8">Our team is available for any inquiries</p>
 
                 {/* Success message */}
                 {sent && (
                   <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 text-green-400 text-[.84rem] rounded-lg">
-                    {locale === "fr" ? "Message envoyé avec succès ! Nous vous répondrons bientôt." : "Message sent successfully! We'll get back to you soon."}
+                    {"Message sent successfully! We'll get back to you soon."}
                   </div>
                 )}
 
@@ -119,8 +119,8 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Nom</label>
-                      <input type="text" required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Votre nom" className="input" />
+                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Name</label>
+                      <input type="text" required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" className="input" />
                     </div>
                     <div>
                       <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Email</label>
@@ -129,17 +129,17 @@ export default function ContactPage() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Téléphone</label>
+                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Phone</label>
                       <input type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="+213 5XX XX XX XX" className="input" />
                     </div>
                     <div>
-                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Sujet</label>
-                      <input type="text" required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="Sujet de votre message" className="input" />
+                      <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Subject</label>
+                      <input type="text" required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="Subject of your message" className="input" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-txtsec text-[.7rem] font-bold uppercase tracking-[.15em] mb-2">Message</label>
-                    <textarea rows={5} required value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Votre message..." className="input resize-none" />
+                    <textarea rows={5} required value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Your message..." className="input resize-none" />
                   </div>
                   <button type="submit" disabled={sending} className="btn btn-primary w-full disabled:opacity-70">
                     {sending ? (
@@ -148,11 +148,11 @@ export default function ContactPage() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                         </svg>
-                        Envoi en cours...
+                        Sending...
                       </div>
                     ) : (
                       <>
-                        Envoyer
+                        Send
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
                         </svg>

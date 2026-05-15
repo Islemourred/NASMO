@@ -4,9 +4,10 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { supabase } from "@/lib/supabase";
+import { useTranslatedData } from "@/lib/useContent";
 
 interface Product {
   slug: string;
@@ -21,30 +22,29 @@ interface Product {
 
 const categories = [
   { key: "all", label: "All Products" },
-  { key: "variateurs", label: "Variateurs" },
-  { key: "stabilisateurs", label: "Stabilisateurs" },
-  { key: "groupes", label: "Groupes Électrogènes" },
-  { key: "onduleurs", label: "Onduleurs" },
+  { key: "drives", label: "Drives" },
+  { key: "stabilizers", label: "Stabilizers" },
+  { key: "generators", label: "Generators" },
+  { key: "ups", label: "UPS" },
   { key: "augier", label: "Augier Energy" },
 ];
 
 const catLabels: Record<string, string> = {
-  stabilisateurs: "Stabilisateurs", groupes: "Groupes", onduleurs: "Onduleurs", augier: "Augier", variateurs: "Variateurs",
+  stabilizers: "Stabilizers", generators: "Generators", ups: "UPS", augier: "Augier", drives: "Drives",
 };
 
 export default function ProductsPage() {
   const locale = useLocale();
   const [active, setActive] = useState("all");
   const [search, setSearch] = useState("");
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase.from("products").select("*").eq("active", true).order("sort_order").then(({ data }) => {
-      setProducts(data ?? []);
-      setLoading(false);
-    });
-  }, []);
+  const { data: products, loading } = useTranslatedData<Product>(
+    "products",
+    ["name", "description"],
+    async () => {
+      const { data } = await supabase.from("products").select("*").eq("active", true).order("sort_order");
+      return data ?? [];
+    }
+  );
 
   const filtered = products.filter(p => {
     const matchCat = active === "all" || p.category === active;
@@ -63,11 +63,11 @@ export default function ProductsPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/90" />
         <div className="relative z-10 h-full container flex flex-col justify-end pb-14">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
-            <div className="section-label text-white/40 mb-5">Nos Produits</div>
+            <div className="section-label text-white/40 mb-5">Our Products</div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
-              Catalogue Produits
+              Product Catalog
             </h1>
-            <p className="text-white/35 mt-4 max-w-lg text-base">Découvrez notre gamme complète d'équipements électriques industriels</p>
+            <p className="text-white/35 mt-4 max-w-lg text-base">Discover our complete range of industrial electrical equipment</p>
           </motion.div>
         </div>
       </section>
@@ -140,7 +140,7 @@ export default function ProductsPage() {
                             <div className="text-[.7rem] text-txtsec font-medium mb-3">{p.power}</div>
                           )}
                           <span className="text-orange text-[.72rem] font-bold uppercase tracking-wider inline-flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
-                            Voir détails
+                            View details
                             <span className="w-4 h-px bg-orange group-hover:w-7 transition-all" />
                           </span>
                         </div>
@@ -167,7 +167,7 @@ export default function ProductsPage() {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
                 </svg>
-                Télécharger le catalogue (PDF)
+                Download catalog (PDF)
               </a>
             </div>
           </AnimatedSection>

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { supabase } from "@/lib/supabase";
-import { useMultiSiteContent } from "@/lib/useContent";
+import { useMultiSiteContent, useTranslatedData } from "@/lib/useContent";
 import { useLocale } from "next-intl";
 
 export default function Home() {
@@ -52,7 +52,7 @@ function Hero() {
       <div className="relative z-10 h-full container flex flex-col justify-end pb-20 lg:pb-28">
         <motion.div key={current} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: .8, ease: [.25,.1,.25,1] }}>
-          <div className="section-label text-white/50 mb-6">{h.badge || "Depuis 2013"}</div>
+          <div className="section-label text-white/50 mb-6">{h.badge || "Since 2013"}</div>
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05] max-w-4xl mb-6">
             {slides[current].title}
           </h1>
@@ -61,12 +61,12 @@ function Hero() {
           </p>
           <div className="flex flex-wrap gap-4">
             <Link href={`/${locale}/services`} className="btn btn-primary">
-              {h.cta_primary || "Nos Services"}
+              {h.cta_primary || "Our Services"}
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </Link>
-            <Link href={`/${locale}/contact`} className="btn btn-ghost">{h.cta_secondary || "Contactez-nous"}</Link>
+            <Link href={`/${locale}/contact`} className="btn btn-ghost">{h.cta_secondary || "Contact Us"}</Link>
           </div>
         </motion.div>
         <div className="absolute bottom-8 end-8 lg:end-12 flex gap-2">
@@ -115,20 +115,21 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
 
 /* ══════════════════ STATS ══════════════════ */
 function Stats() {
-  const [stats, setStats] = useState<{ target: number; suffix: string; label: string }[]>([]);
+  const { data: rawStats } = useTranslatedData(
+    "site_content_stats",
+    ["label"],
+    async () => {
+      const { data } = await supabase.from("site_content").select("key, value, label").eq("section", "stats").order("sort_order");
+      return (data ?? []).map(d => ({ ...d, id: d.key }));
+    }
+  );
 
-  useEffect(() => {
-    supabase.from("site_content").select("key, value, label").eq("section", "stats").order("sort_order").then(({ data }) => {
-      if (data && data.length > 0) {
-        setStats(data.map(d => {
-          const numMatch = d.value.match(/^(\d+)/);
-          const target = numMatch ? parseInt(numMatch[1]) : 0;
-          const suffix = d.value.replace(/^\d+/, "");
-          return { target, suffix, label: d.label };
-        }));
-      }
-    });
-  }, []);
+  const stats = rawStats.map(d => {
+    const numMatch = d.value.match(/^(\d+)/);
+    const target = numMatch ? parseInt(numMatch[1]) : 0;
+    const suffix = d.value.replace(/^\d+/, "");
+    return { target, suffix, label: d.label };
+  });
 
   if (stats.length === 0) return null;
 
@@ -153,13 +154,14 @@ function Stats() {
 /* ══════════════════ SERVICES ══════════════════ */
 function Services() {
   const locale = useLocale();
-  const [items, setItems] = useState<{ id: string; title: string; description: string; image_url: string }[]>([]);
-
-  useEffect(() => {
-    supabase.from("services").select("id, title, description, image_url").eq("active", true).order("sort_order").then(({ data }) => {
-      setItems(data ?? []);
-    });
-  }, []);
+  const { data: items } = useTranslatedData(
+    "services",
+    ["title", "description"],
+    async () => {
+      const { data } = await supabase.from("services").select("id, title, description, image_url").eq("active", true).order("sort_order");
+      return data ?? [];
+    }
+  );
 
   if (items.length === 0) return null;
 
@@ -170,7 +172,7 @@ function Services() {
           <AnimatedSection>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-txt tracking-tight leading-[1.1]">
-                Nos Services
+                Our Services
               </h2>
             </div>
           </AnimatedSection>
@@ -197,7 +199,7 @@ function Services() {
                   <p className="text-txtsec text-[.92rem] leading-[1.85] mb-8 max-w-md">{s.description}</p>
                   <Link href={`/${locale}/services`}
                     className="inline-flex items-center gap-3 text-orange text-[.8rem] font-semibold uppercase tracking-wider group">
-                    En savoir plus
+                    Learn more
                     <span className="w-8 h-px bg-orange group-hover:w-12 transition-all" />
                   </Link>
                 </div>
@@ -229,13 +231,13 @@ function About() {
               </div>
               <div className="absolute -bottom-6 -right-6 lg:-right-10 bg-orange text-black p-6 lg:p-8">
                 <div className="text-3xl lg:text-4xl font-black leading-none mb-1">{stats.years || "10+"}</div>
-                <div className="text-[.7rem] font-bold uppercase tracking-wider opacity-70">{about.years_label || "Années d'expérience"}</div>
+                <div className="text-[.7rem] font-bold uppercase tracking-wider opacity-70">{about.years_label || "Years of experience"}</div>
               </div>
             </div>
           </AnimatedSection>
 
           <AnimatedSection>
-            <div className="section-label mb-6">{about.section_tag || "À propos"}</div>
+            <div className="section-label mb-6">{about.section_tag || "About"}</div>
             <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-txt tracking-tight leading-[1.1] mb-6">
               {about.title || "NASMO"}
             </h2>
@@ -254,7 +256,7 @@ function About() {
             </div>
 
             <Link href={`/${locale}/a-propos`} className="btn btn-outline-orange">
-              En savoir plus
+              Learn more
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
@@ -283,9 +285,9 @@ function Clients() {
       <div className="container">
         <AnimatedSection>
           <div className="text-center mb-16">
-            <div className="section-label justify-center mb-6">Nos Clients</div>
+            <div className="section-label justify-center mb-6">Our Clients</div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-txt tracking-tight">
-              Ils nous font confiance
+              They trust us
             </h2>
           </div>
         </AnimatedSection>
@@ -320,23 +322,23 @@ function CTA() {
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative z-10 h-full container flex flex-col items-center justify-center text-center">
           <AnimatedSection>
-            <div className="section-label text-white/50 justify-center mb-6">Contactez-nous</div>
+            <div className="section-label text-white/50 justify-center mb-6">Contact Us</div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5 max-w-2xl leading-tight">
-              {cta.heading || "Un projet ? Contactez notre équipe."}
+              {cta.heading || "Have a project? Contact our team."}
             </h2>
             <p className="text-white/40 mb-10 text-lg">
-              {cta.phone_label || "Appelez-nous au"}{" "}
+              {cta.phone_label || "Call us at"}{" "}
               <span className="text-orange font-bold">{contact.phone || cta.phone || "+213 551 99 55 68"}</span>
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link href={`/${locale}/contact`} className="btn btn-primary">
-                Contactez-nous
+                Contact Us
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
               <a href={`tel:${(contact.phone || "+213551995568").replace(/[\s().]/g, "")}`} className="btn btn-ghost">
-                Appeler
+                Call
               </a>
             </div>
           </AnimatedSection>

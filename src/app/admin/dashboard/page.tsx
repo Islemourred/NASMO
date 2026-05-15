@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
   const statCards = [
     { label: "Produits", val: stats.products.toString(), change: "Produits actifs", icon: "M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25", color: "orange" },
-    { label: "Services", val: stats.services.toString(), change: "Services actifs", icon: "M11.42 15.17l-5.1-5.1m0 0L12 4.37m-5.68 5.7h11.36M4.5 12a7.5 7.5 0 1015 0 7.5 7.5 0 00-15 0z", color: "navy-light" },
+    { label: "Services", val: stats.services.toString(), change: "Services actifs", icon: "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z", color: "orange" },
     { label: "Messages", val: stats.messages.toString(), change: `${stats.unread} non lus`, icon: "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75", color: "orange" },
   ];
 
@@ -86,8 +86,8 @@ export default function DashboardPage() {
           <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * .08 }}
             className="card p-5 hover:shadow-lg">
             <div className="flex items-start justify-between mb-3">
-              <div className={`w-10 h-10 rounded-xl bg-${s.color}/10 flex items-center justify-center`}>
-                <svg className={`w-5 h-5 text-${s.color}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <div className="w-10 h-10 rounded-xl bg-orange/10 flex items-center justify-center">
+                <svg className="w-5 h-5 text-orange" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d={s.icon} />
                 </svg>
               </div>

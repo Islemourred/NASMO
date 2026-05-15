@@ -27,11 +27,29 @@ export default function ServiceDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("services").select("*").eq("id", slug).single().then(({ data }) => {
+    supabase.from("services").select("*").eq("id", slug).single().then(async ({ data }) => {
+      if (data && locale !== "en") {
+        try {
+          const items = [
+            { sourceTable: "services", sourceId: data.id, fieldName: "title", text: data.title },
+            { sourceTable: "services", sourceId: data.id, fieldName: "description", text: data.description },
+          ];
+          const res = await fetch("/api/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items, locale }),
+          });
+          if (res.ok) {
+            const { translations } = await res.json();
+            data.title = translations[0];
+            data.description = translations[1];
+          }
+        } catch {}
+      }
       setService(data);
       setLoading(false);
     });
-  }, [slug]);
+  }, [slug, locale]);
 
   if (loading) {
     return (
@@ -48,8 +66,8 @@ export default function ServiceDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-txt mb-4">Service non trouvé</h1>
-          <Link href={`/${locale}/services`} className="btn btn-primary">Retour aux services</Link>
+          <h1 className="text-2xl font-bold text-txt mb-4">Service not found</h1>
+          <Link href={`/${locale}/services`} className="btn btn-primary">Back to services</Link>
         </div>
       </div>
     );
@@ -68,7 +86,7 @@ export default function ServiceDetailPage() {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
-              Tous les services
+              All services
             </Link>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
               {service.title}
@@ -84,13 +102,13 @@ export default function ServiceDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
             <div className="lg:col-span-2 space-y-14">
               <AnimatedSection>
-                <div className="section-label mb-5">Présentation</div>
+                <div className="section-label mb-5">Overview</div>
                 <p className="text-txtsec text-[.95rem] leading-[1.9]">{service.description}</p>
               </AnimatedSection>
 
               {service.features && service.features.length > 0 && (
                 <AnimatedSection>
-                  <div className="section-label mb-6">Ce que nous offrons</div>
+                  <div className="section-label mb-6">What we offer</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {service.features.map((f, i) => (
                       <motion.div key={i} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
@@ -114,13 +132,13 @@ export default function ServiceDetailPage() {
                   <div className="section-label mb-5">Contact</div>
                   <div className="mt-4 space-y-3">
                     <Link href={`/${locale}/contact`} className="btn btn-primary w-full justify-center text-[.8rem]">
-                      Demander ce service
+                      Request this service
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
                     </Link>
                     <a href={`tel:${(contact.phone || "+213551995568").replace(/[\s().]/g, "")}`} className="btn btn-secondary w-full justify-center text-[.8rem]">
-                      Appeler
+                      Call
                     </a>
                   </div>
                 </div>
@@ -136,11 +154,11 @@ export default function ServiceDetailPage() {
         <div className="absolute inset-0 bg-black/75" />
         <div className="relative z-10 h-full container flex flex-col items-center justify-center text-center">
           <AnimatedSection>
-            <h3 className="text-xl lg:text-2xl font-extrabold text-white mb-3 tracking-tight">Intéressé par ce service ?</h3>
+            <h3 className="text-xl lg:text-2xl font-extrabold text-white mb-3 tracking-tight">Interested in this service?</h3>
             <p className="text-white/35 mb-6">
               <span className="text-orange font-bold">{contact.phone || "+213 551 99 55 68"}</span>
             </p>
-            <Link href={`/${locale}/contact`} className="btn btn-primary">Contactez-nous</Link>
+            <Link href={`/${locale}/contact`} className="btn btn-primary">Contact Us</Link>
           </AnimatedSection>
         </div>
       </section>

@@ -18,7 +18,7 @@ interface Product {
   active: boolean;
 }
 
-const catOptions = ["stabilisateurs", "variateurs", "groupes", "onduleurs", "augier"];
+const catOptions = ["stabilizers", "drives", "generators", "ups", "augier"];
 
 export default function ProductsAdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,7 +26,7 @@ export default function ProductsAdminPage() {
   const [showAdd, setShowAdd] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  const [newProduct, setNewProduct] = useState({ name: "", category: "onduleurs", sub_category: "", description: "", power: "", image_url: "/images/product-cyclone.png", brand: "" });
+  const [newProduct, setNewProduct] = useState({ name: "", category: "ups", sub_category: "", description: "", power: "", image_url: "/images/product-cyclone.png", brand: "" });
 
   const fetchProducts = async () => {
     const { data } = await supabase.from("products").select("*").order("sort_order");
@@ -59,7 +59,7 @@ export default function ProductsAdminPage() {
       ...newProduct, slug, active: true, sort_order: products.length + 1,
     }).select().single();
     if (data) setProducts([...products, data]);
-    setNewProduct({ name: "", category: "onduleurs", sub_category: "", description: "", power: "", image_url: "/images/product-cyclone.png", brand: "" });
+    setNewProduct({ name: "", category: "ups", sub_category: "", description: "", power: "", image_url: "/images/product-cyclone.png", brand: "" });
     setShowAdd(false);
   };
 

@@ -4,10 +4,9 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { supabase } from "@/lib/supabase";
-import { useSiteContent } from "@/lib/useContent";
+import { useSiteContent, useTranslatedData } from "@/lib/useContent";
 
 interface Service {
   id: string;
@@ -21,15 +20,14 @@ interface Service {
 export default function ServicesPage() {
   const locale = useLocale();
   const { content: contact } = useSiteContent("contact");
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase.from("services").select("*").eq("active", true).order("sort_order").then(({ data }) => {
-      setServices(data ?? []);
-      setLoading(false);
-    });
-  }, []);
+  const { data: services, loading } = useTranslatedData<Service>(
+    "services",
+    ["title", "description"],
+    async () => {
+      const { data } = await supabase.from("services").select("*").eq("active", true).order("sort_order");
+      return data ?? [];
+    }
+  );
 
   return (
     <>
@@ -40,11 +38,11 @@ export default function ServicesPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80" />
         <div className="relative z-10 h-full container flex flex-col justify-end pb-16">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
-            <div className="section-label text-white/40 mb-5">Nos Services</div>
+            <div className="section-label text-white/40 mb-5">Our Services</div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
-              Ce que nous offrons
+              What We Offer
             </h1>
-            <p className="text-white/35 mt-4 max-w-lg text-base">Des solutions électriques fiables pour tous vos besoins industriels</p>
+            <p className="text-white/35 mt-4 max-w-lg text-base">Reliable electrical solutions for all your industrial needs</p>
           </motion.div>
         </div>
       </section>
@@ -98,7 +96,7 @@ export default function ServicesPage() {
 
                     <Link href={`/${locale}/contact`}
                       className="inline-flex items-center gap-3 text-orange text-[.8rem] font-semibold uppercase tracking-wider group">
-                      En savoir plus
+                      Learn more
                       <span className="w-8 h-px bg-orange group-hover:w-14 transition-all duration-300" />
                     </Link>
                   </div>
@@ -115,11 +113,11 @@ export default function ServicesPage() {
         <div className="absolute inset-0 bg-black/75" />
         <div className="relative z-10 h-full container flex flex-col items-center justify-center text-center">
           <AnimatedSection>
-            <h3 className="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Un projet ? Contactez-nous</h3>
+            <h3 className="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Have a project? Contact us</h3>
             <p className="text-white/35 mb-8">
-              Appelez-nous au <span className="text-orange font-bold">{contact.phone || "+213 551 99 55 68"}</span>
+              Call us at <span className="text-orange font-bold">{contact.phone || "+213 551 99 55 68"}</span>
             </p>
-            <Link href={`/${locale}/contact`} className="btn btn-primary">Contactez-nous</Link>
+            <Link href={`/${locale}/contact`} className="btn btn-primary">Contact Us</Link>
           </AnimatedSection>
         </div>
       </section>

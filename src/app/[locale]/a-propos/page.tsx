@@ -7,7 +7,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { supabase } from "@/lib/supabase";
-import { useMultiSiteContent } from "@/lib/useContent";
+import { useMultiSiteContent, useTranslatedData } from "@/lib/useContent";
 
 function useCounter(end: number, duration = 2000) {
   const [count, setCount] = useState(0);
@@ -43,20 +43,21 @@ export default function AboutPage() {
   const about = c.about || {};
   const cta = c.cta || {};
 
-  const [stats, setStats] = useState<{ val: number; suffix: string; label: string }[]>([]);
+  const { data: rawStats } = useTranslatedData(
+    "site_content_stats",
+    ["label"],
+    async () => {
+      const { data } = await supabase.from("site_content").select("key, value, label").eq("section", "stats").order("sort_order");
+      return (data ?? []).map(d => ({ ...d, id: d.key }));
+    }
+  );
 
-  useEffect(() => {
-    supabase.from("site_content").select("key, value, label").eq("section", "stats").order("sort_order").then(({ data }) => {
-      if (data && data.length > 0) {
-        setStats(data.map(d => {
-          const numMatch = d.value.match(/^(\d+)/);
-          const val = numMatch ? parseInt(numMatch[1]) : 0;
-          const suffix = d.value.replace(/^\d+/, "");
-          return { val, suffix, label: d.label };
-        }));
-      }
-    });
-  }, []);
+  const stats = rawStats.map(d => {
+    const numMatch = d.value.match(/^(\d+)/);
+    const val = numMatch ? parseInt(numMatch[1]) : 0;
+    const suffix = d.value.replace(/^\d+/, "");
+    return { val, suffix, label: d.label };
+  });
 
   return (
     <>
@@ -67,7 +68,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/80" />
         <div className="relative z-10 h-full container flex flex-col justify-end pb-16">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
-            <div className="section-label text-white/40 mb-5">{about.section_tag || "À propos"}</div>
+            <div className="section-label text-white/40 mb-5">{about.section_tag || "About"}</div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05]">
               {about.title || "NASMO"}
             </h1>
@@ -104,13 +105,13 @@ export default function AboutPage() {
                 </div>
                 <div className="absolute -bottom-6 -right-6 lg:-right-10 bg-orange text-black p-6 lg:p-8">
                   <div className="text-3xl lg:text-4xl font-black leading-none mb-1">{(c.stats || {}).years || "10+"}</div>
-                  <div className="text-[.7rem] font-bold uppercase tracking-wider opacity-70">{about.years_label || "Années d'expérience"}</div>
+                  <div className="text-[.7rem] font-bold uppercase tracking-wider opacity-70">{about.years_label || "Years of experience"}</div>
                 </div>
               </div>
             </AnimatedSection>
 
             <AnimatedSection>
-              <div className="section-label mb-6">{about.section_tag || "À propos"}</div>
+              <div className="section-label mb-6">{about.section_tag || "About"}</div>
               <p className="text-txtsec text-[.92rem] leading-[1.9] mb-5">{about.desc1 || ""}</p>
               <p className="text-txtsec text-[.92rem] leading-[1.9] mb-8">{about.desc2 || ""}</p>
 
@@ -136,11 +137,11 @@ export default function AboutPage() {
         <div className="relative z-10 h-full container flex flex-col items-center justify-center text-center">
           <AnimatedSection>
             <h2 className="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">
-              {cta.heading || "Un projet ? Contactez notre équipe."}
+              {cta.heading || "Have a project? Contact our team."}
             </h2>
-            <p className="text-white/35 mb-8">Notre équipe est à votre disposition</p>
+            <p className="text-white/35 mb-8">Our team is at your service</p>
             <Link href={`/${locale}/contact`} className="btn btn-primary">
-              Contactez-nous
+              Contact Us
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
               </svg>
