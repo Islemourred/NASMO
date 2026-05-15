@@ -156,6 +156,14 @@ export default function Navbar() {
           transition={{ type: "spring", damping: 28, stiffness: 300 }}
           className={`lg:hidden fixed inset-y-0 ${isRtl ? "left-0 border-r" : "right-0 border-l"} w-[80vw] max-w-sm z-[10001] border-line`}
           style={{ top: 0, backgroundColor: 'var(--bg)' }}>
+          {/* Close button */}
+          <button onClick={() => setMobileOpen(false)}
+            className={`absolute top-5 ${isRtl ? "right-5" : "left-5"} w-10 h-10 flex items-center justify-center rounded-xl text-txtmuted hover:text-txt hover:bg-bgalt transition-all`}
+            aria-label="Close menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
           <div className="flex flex-col h-full pt-20 pb-8 px-6">
             <nav className="flex-1 space-y-1">
               {links.map((l, i) => (
