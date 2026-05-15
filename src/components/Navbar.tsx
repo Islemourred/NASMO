@@ -54,6 +54,7 @@ export default function Navbar() {
   ];
 
   return (
+    <>
     <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
       scrolled
         ? "bg-black/90 backdrop-blur-xl border-b border-white/[0.06]"
@@ -137,56 +138,57 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div initial={{ opacity: 0, x: isRtl ? "-100%" : "100%" }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: isRtl ? "-100%" : "100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 300 }}
-            className={`lg:hidden fixed inset-y-0 ${isRtl ? "left-0 border-r" : "right-0 border-l"} w-[80vw] max-w-sm bg-black/98 backdrop-blur-2xl z-40 border-white/[0.06]`}
-            style={{ top: 0 }}>
-            <div className="flex flex-col h-full pt-20 pb-8 px-6">
-              <nav className="flex-1 space-y-1">
-                {links.map((l, i) => (
-                  <motion.div key={l.href} initial={{ opacity: 0, x: isRtl ? -30 : 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * .06 }}>
-                    <Link href={l.href} onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3.5 text-[.95rem] font-medium uppercase tracking-wider transition-all ${
-                        pathname === l.href ? "text-orange" : "text-white/40 hover:text-white"
-                      }`}>
-                      {l.label}
-                    </Link>
-                  </motion.div>
-                ))}
-              </nav>
-
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}
-                className="border-t border-white/[0.06] pt-5 space-y-3">
-                <div className="flex gap-2">
-                  {Object.entries(langs).map(([k, v]) => (
-                    <button key={k} onClick={() => { switchLocale(k); setMobileOpen(false); }}
-                      className={`flex-1 py-2.5 text-xs font-semibold tracking-wide transition-all ${
-                        locale === k ? "bg-orange text-black" : "bg-white/[0.04] text-white/35 hover:text-white/60"
-                      }`}>{v}</button>
-                  ))}
-                </div>
-                <Link href={`/${locale}/contact`} onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full py-3 bg-orange text-black text-sm font-bold uppercase tracking-wider">
-                  {t("serviceOffer")}
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Mobile overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={() => setMobileOpen(false)}
-            className="lg:hidden fixed inset-0 bg-black/60 z-30" />
-        )}
-      </AnimatePresence>
     </header>
+
+    {/* Mobile overlay — outside header to escape z-50 stacking context */}
+    <AnimatePresence>
+      {mobileOpen && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          onClick={() => setMobileOpen(false)}
+          className="lg:hidden fixed inset-0 bg-black/60 z-[10000]" />
+      )}
+    </AnimatePresence>
+
+    {/* Mobile drawer — outside header to escape z-50 stacking context */}
+    <AnimatePresence>
+      {mobileOpen && (
+        <motion.div initial={{ x: isRtl ? "-100%" : "100%" }} animate={{ x: 0 }} exit={{ x: isRtl ? "-100%" : "100%" }}
+          transition={{ type: "spring", damping: 28, stiffness: 300 }}
+          className={`lg:hidden fixed inset-y-0 ${isRtl ? "left-0 border-r" : "right-0 border-l"} w-[80vw] max-w-sm z-[10001] border-line`}
+          style={{ top: 0, backgroundColor: 'var(--bg)' }}>
+          <div className="flex flex-col h-full pt-20 pb-8 px-6">
+            <nav className="flex-1 space-y-1">
+              {links.map((l, i) => (
+                <motion.div key={l.href} initial={{ opacity: 0, x: isRtl ? -30 : 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * .06 }}>
+                  <Link href={l.href} onClick={() => setMobileOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3.5 text-[.95rem] font-medium uppercase tracking-wider transition-all ${
+                      pathname === l.href ? "text-orange" : "text-txtmuted hover:text-txt"
+                    }`}>
+                    {l.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}
+              className="border-t border-line pt-5 space-y-3">
+              <div className="flex gap-2">
+                {Object.entries(langs).map(([k, v]) => (
+                  <button key={k} onClick={() => { switchLocale(k); setMobileOpen(false); }}
+                    className={`flex-1 py-2.5 text-xs font-semibold tracking-wide transition-all ${
+                      locale === k ? "bg-orange text-black" : "bg-bgalt text-txtmuted hover:text-txtsec"
+                    }`}>{v}</button>
+                ))}
+              </div>
+              <Link href={`/${locale}/contact`} onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-3 bg-orange text-black text-sm font-bold uppercase tracking-wider">
+                {t("serviceOffer")}
+              </Link>
+            </motion.div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
